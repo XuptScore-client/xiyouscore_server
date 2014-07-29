@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" 
+	xmlns="http://java.sun.com/xml/ns/javaee" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+	http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+  <welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>
+  </welcome-file-list>
+  
+  <servlet>
+    <servlet-name>GetPic</servlet-name>
+    <servlet-class>com.mc.service.GetPic</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>LoginServlet</servlet-name>
+    <servlet-class>com.mc.service.LoginServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>LoginSuccessReturnHerf</servlet-name>
+    <servlet-class>com.mc.service.LoginSuccessReturnHerf</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>ChaXunXinXi</servlet-name>
+    <servlet-class>com.mc.service.ChaXunXinXi</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>ChangePasswd</servlet-name>
+    <servlet-class>com.mc.service.ChangePasswd</servlet-class>
+  </servlet>
+
+
+
+
+  <servlet-mapping>
+    <servlet-name>GetPic</servlet-name>
+    <url-pattern>/GetPic.jsp</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>LoginServlet</servlet-name>
+    <url-pattern>/login.jsp</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>LoginSuccessReturnHerf</servlet-name>
+    <url-pattern>/returnHerf.jsp</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ChaXunXinXi</servlet-name>
+    <url-pattern>/xscjcx.aspx</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ChangePasswd</servlet-name>
+    <url-pattern>/changepw.jsp</url-pattern>
+  </servlet-mapping>
+</web-app>
