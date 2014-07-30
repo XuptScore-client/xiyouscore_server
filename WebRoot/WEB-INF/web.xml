@@ -30,6 +30,13 @@
     <servlet-name>ChangePasswd</servlet-name>
     <servlet-class>com.mc.service.ChangePasswd</servlet-class>
   </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>CheckVersion</servlet-name>
+    <servlet-class>com.mc.service.CheckVersion</servlet-class>
+  </servlet>
+
 
 
 
@@ -53,5 +60,9 @@
   <servlet-mapping>
     <servlet-name>ChangePasswd</servlet-name>
     <url-pattern>/changepw.jsp</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>CheckVersion</servlet-name>
+    <url-pattern>/checkversion.jsp</url-pattern>
   </servlet-mapping>
 </web-app>
