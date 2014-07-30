@@ -49,7 +49,7 @@ public class CheckVersion extends HttpServlet {
 
 		String version = request.getParameter("version");
 		Connection connection = DBUtil.openConnection();
-		String query = "select version,times from apk_version order by id DESC limit 1";// 查询最后一条数据
+		String query = "select * from apk_version order by id DESC limit 1";// 查询最后一条数据
 		String update = "update apk_version set times=? where version=?";// 更新下载次数
 		String result = "";
 		try {
@@ -91,9 +91,9 @@ public class CheckVersion extends HttpServlet {
 		try {
 			return Double.parseDouble(oldVersion.trim()) < Double
 					.parseDouble(newVersion.trim()) ? getVersion
-					.getString("URL")
+					.getString("url")
 					+ "|"
-					+ getVersion.getString("VERSION")
+					+ getVersion.getString("version")
 					+ "|" + getVersion.getString("content") : "no";
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
