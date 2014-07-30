@@ -82,9 +82,9 @@ this.doPost(request, response);
 		String result =  HttpUtil.http(HttpUtil.LOGIN_URL, map,sessionID);//post请求
 		//正则表达式 获取script中的数据
 		result = HtmlUtil.htmlRemoveTag(result);
-		System.out.println(result);
+//		System.out.println(result);
 		String newurl = result.split("\\;")[0].split("\\'")[1];
-		System.out.println(newurl);
+//		System.out.println(newurl);
 		if (newurl.equals("密码错误！！")) {//密码错误
 			result = "error";
 		}else {
