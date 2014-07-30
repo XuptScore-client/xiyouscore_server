@@ -3,6 +3,7 @@ package com.mc.db;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -32,8 +33,6 @@ public class DBUtil {
 			String url = p.getProperty("oracleURL");
 			String username = p.getProperty("oracleUser");
 			String password = p.getProperty("oraclePassword");
-			System.out
-					.println("fsfasfdsf" + driver + url + username + password);
 			Class.forName(driver).newInstance();
 			c = DriverManager.getConnection(url, username, password);
 			System.out.println("successful connection");
@@ -53,6 +52,7 @@ public class DBUtil {
 		try {
 			if(conn!=null)
 			conn.close();
+			System.out.println("关闭数据库连接");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -72,5 +72,86 @@ public class DBUtil {
 			e.printStackTrace();
 		}
 		dbUtil.closeConn(conn);
+	}
+	
+	/**
+	 * 查询用户是否存在
+	 */
+	public static boolean isHaveUser(String username){
+		String sql  = "select count(*) from users where username = ?";
+		Connection conn = DBUtil.openConnection();
+		boolean result = true;
+		try {
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setString(1, username);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				if (rs.getInt(1) == 0) {
+					result =  false;
+				}
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			DBUtil.closeConn(conn);
+		}
+		DBUtil.closeConn(conn);
+		return result;
+	}
+	/**
+	 * 插入用户
+	 */
+	public static void insertUser(String username,String password){
+		String sql  = "insert into users(username,password) values (?,?)";
+		Connection conn = DBUtil.openConnection();
+		try {
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setString(1, username);
+			ps.setString(2, password);
+			ps.execute();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		DBUtil.closeConn(conn);
+	}
+	
+	/**
+	 * 更新用户
+	 */
+	public static void updateUserPassword(String username,String password){
+		String sql  = "update user set password = ? where username = ?";
+		Connection conn = DBUtil.openConnection();
+		try {
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setString(1, password);
+			ps.setString(2, username);
+			ps.execute();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		DBUtil.closeConn(conn);
+	}
+	/**
+	 * 插入用户名字
+	 */
+	public static void insertUserName(String username,String name){
+		String sql  = "update users set name = ? where username = ?";
+		Connection conn = DBUtil.openConnection();
+		try {
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setString(1, name);
+			ps.setString(2, username);
+			ps.execute();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		DBUtil.closeConn(conn);
 	}
 }

@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 import model.ScoreModel;
 import model.XueKeScore;
 
+import com.mc.db.DBUtil;
 import com.mc.jsonutil.JSONUtil;
 import com.mc.util.BASE64;
 import com.mc.util.CalculateFileTime;
@@ -60,14 +61,20 @@ public class ChaXunXinXi extends HttpServlet {
 		if (!file.exists()) {
 			file.mkdirs();//创建保存 学生 xml的文件夹
 		}
+		String name = URLDecoder.decode(request
+				.getParameter("xm"), "utf-8");//用户名
+		//将用户的名字保存到数据库
+		DBUtil.insertUserName(filename, name);
+		
 		filename = root_path+filename + ".xml";//文件名
+		
 		String url = request.getParameter("url")
 				+ "&xm="
 				+ URLEncoder.encode(URLDecoder.decode(request
 						.getParameter("xm"), "utf-8")) + "&gnmkdm="
 				+ request.getParameter("gnmkdm");
 
-		System.out.println(url);
+//		System.out.println(url);
 
 		try {
 			if (!new File(filename).exists()||CalculateFileTime.isRequest(new File(filename))) {
@@ -210,7 +217,7 @@ public class ChaXunXinXi extends HttpServlet {
 			ScoreModelDAO scoreModelDAO = new ScoreModelDAO();
 			scoreModelDAO.setLiScoreModels(listTableScore);
 			json_score = JSONUtil.toJSON(scoreModelDAO);
-			System.out.println("json:" + json_score);
+//			System.out.println("json:" + json_score);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -224,7 +231,7 @@ public class ChaXunXinXi extends HttpServlet {
 	private InputStream getStringStream(String filename) {
 		InputStream in = null;
 		try {
-			System.out.println("读文件" + filename);
+//			System.out.println("读文件" + filename);
 			in = new FileInputStream(filename);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block

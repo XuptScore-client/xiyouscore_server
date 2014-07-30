@@ -112,10 +112,10 @@ public class HttpUtil {
 				// String newurl = HtmlUtil.getHERF(result,0) ;//获取跳转的herf
 				con.disconnect();
 
-				System.out.println("重定向" + newurl + "\n " + result);
+//				System.out.println("重定向" + newurl + "\n " + result);
 				newurl = HttpUtil.IP + newurl;
 				result = HttpUtil.gethttp(newurl, cookie);// 返回重定向的页面
-				System.out.println("重定向" + newurl + "\n " + result);
+//				System.out.println("重定向" + newurl + "\n " + result);
 			}
 			//System.out.println(result);
 		} catch (Exception e) {

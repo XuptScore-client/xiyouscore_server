@@ -84,7 +84,7 @@ public class HtmlUtil {
 		// 得到所有过滤后，想要的节点
 		nodelist = nodelist.extractAllNodesThatMatch(filter, true);
 		for (int i = 0; i < nodelist.size(); i++) {
-			System.out.println("\n");
+//			System.out.println("\n");
 			LinkTag link = (LinkTag) nodelist.elementAt(i);
  
 			//InputTag inputTag 
@@ -170,7 +170,7 @@ public class HtmlUtil {
 		nodelist = nodelist.extractAllNodesThatMatch(filter, true);
 		List<Herf> listHerf = new ArrayList<Herf>();// json格式
 		for (int i = 0; i < nodelist.size(); i++) {
-			System.out.println("\n");
+//			System.out.println("\n");
 			LinkTag link = (LinkTag) nodelist.elementAt(i);
 
 			if (flag == 1) {// 所有链接
@@ -220,7 +220,7 @@ public class HtmlUtil {
 		}
 
 		System.out.println("==============fdf==========================");
-		System.out.println(tittle);
+//		System.out.println(tittle);
 		return tittle;
 	}
 

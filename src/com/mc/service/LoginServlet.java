@@ -2,6 +2,10 @@ package com.mc.service;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,6 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.mc.db.DBUtil;
 import com.mc.util.HtmlUtil;
 import com.mc.util.HttpUtil;
 
@@ -83,17 +88,23 @@ this.doPost(request, response);
 		if (newurl.equals("密码错误！！")) {//密码错误
 			result = "error";
 		}else {
+			//登录成功 插入数据库
+			if (!DBUtil.isHaveUser(username)) {//如果不存在，则插入新用户
+				DBUtil.insertUser(username, password);
+			}
 			//System.out.println("result:"+result+"\n newurl:"+newurl);
 			newurl = HttpUtil.IP+newurl;
 			result = HttpUtil.gethttp(newurl, sessionID);// 返回重定向的页面
 			result = HtmlUtil.getHERF(result,1);// 获取所有的herf ， 比如 查询成绩的herf
-			System.out.println("打印:" + result);
+//			System.out.println("打印:" + result);
 		}
 		
 		response.setCharacterEncoding("utf-8");
 		PrintWriter out = response.getWriter();
 		out.write(result);
 	}
+	
+	
 	 /** 
      * 将容易引起req漏洞的半角字符直接替换成全角字符 
      *  
