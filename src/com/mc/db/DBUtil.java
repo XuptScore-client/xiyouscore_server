@@ -24,7 +24,6 @@ public class DBUtil {
 	public static synchronized Connection openConnection() {
 		Properties p = new Properties();
 		Connection c = null;
-		ResultSet rs = null;
 		try {
 			InputStream in = DBUtil.class
 					.getResourceAsStream("/configDB.properties");

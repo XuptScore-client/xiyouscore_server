@@ -53,7 +53,6 @@ public class CheckVersion extends HttpServlet {
 		String update = "update apk_version set times=? where version=?";// 更新下载次数
 		String result = "";
 		try {
-
 			PreparedStatement query_last = connection.prepareStatement(query); // 查询最后一条数据
 			ResultSet rs_query = query_last.executeQuery();
 			PreparedStatement update_last = connection.prepareStatement(update);// 更新下载次数
@@ -87,7 +86,6 @@ public class CheckVersion extends HttpServlet {
 	 */
 	private static String judgeVersion(String oldVersion, String newVersion,
 			ResultSet getVersion) {
-
 		try {
 			return Double.parseDouble(oldVersion.trim()) < Double
 					.parseDouble(newVersion.trim()) ? getVersion
