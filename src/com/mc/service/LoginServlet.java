@@ -84,13 +84,22 @@ this.doPost(request, response);
 		result = HtmlUtil.htmlRemoveTag(result);
 //		System.out.println(result);
 		String newurl = result.split("\\;")[0].split("\\'")[1];
-//		System.out.println(newurl);
+		System.out.println(newurl);
 		if (newurl.equals("密码错误！！")) {//密码错误
 			result = "error";
-		}else {
+		}
+		if (newurl.equals("用户名不存在！！")) {
+			result = "no_user";
+		}
+		else {
 			//登录成功 插入数据库
-			if (!DBUtil.isHaveUser(username)) {//如果不存在，则插入新用户
-				DBUtil.insertUser(username, password);
+			try {
+				if (!DBUtil.isHaveUser(username)) {//如果不存在，则插入新用户
+					DBUtil.insertUser(username, password);
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 			//System.out.println("result:"+result+"\n newurl:"+newurl);
 			newurl = HttpUtil.IP+newurl;
