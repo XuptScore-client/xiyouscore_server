@@ -79,11 +79,17 @@ this.doPost(request, response);
 		result = HtmlUtil.htmlRemoveTag(result);
 		System.out.println(result);
 		String newurl = result.split("\\;")[0].split("\\'")[1];
-		//System.out.println("result:"+result+"\n newurl:"+newurl);
-		newurl = HttpUtil.IP+newurl;
-		result = HttpUtil.gethttp(newurl, sessionID);// 返回重定向的页面
-		result = HtmlUtil.getHERF(result,1);// 获取所有的herf ， 比如 查询成绩的herf
-		System.out.println("打印:" + result);
+		System.out.println(newurl);
+		if (newurl.equals("密码错误！！")) {//密码错误
+			result = "error";
+		}else {
+			//System.out.println("result:"+result+"\n newurl:"+newurl);
+			newurl = HttpUtil.IP+newurl;
+			result = HttpUtil.gethttp(newurl, sessionID);// 返回重定向的页面
+			result = HtmlUtil.getHERF(result,1);// 获取所有的herf ， 比如 查询成绩的herf
+			System.out.println("打印:" + result);
+		}
+		
 		response.setCharacterEncoding("utf-8");
 		PrintWriter out = response.getWriter();
 		out.write(result);
