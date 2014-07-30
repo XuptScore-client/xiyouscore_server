@@ -63,7 +63,7 @@ public class DBUtil {
 		DBUtil dbUtil = new DBUtil();
 		Connection conn = dbUtil.openConnection();
 		Statement state = conn.createStatement();
-		ResultSet rs = state.executeQuery("select version from apk_version");
+		ResultSet rs = state.executeQuery("select version,times from apk_version order by id DESC limit 1");
 		try {
 			while (rs.next()) {
 				// BLOB blob = (BLOB) rs.getBlob("attachment");
