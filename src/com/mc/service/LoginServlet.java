@@ -87,26 +87,30 @@ this.doPost(request, response);
 		System.out.println(newurl);
 		if (newurl.equals("密码错误！！")) {//密码错误
 			result = "error";
-		}
-		if (newurl.equals("用户名不存在！！")) {
-			result = "no_user";
-		}
-		else {
-			//登录成功 插入数据库
-			try {
-				if (!DBUtil.isHaveUser(username)) {//如果不存在，则插入新用户
-					DBUtil.insertUser(username, password);
-				}
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		}else {
+			if (newurl.equals("用户名不存在！！")) {
+				result = "no_user";
 			}
-			//System.out.println("result:"+result+"\n newurl:"+newurl);
-			newurl = HttpUtil.IP+newurl;
-			result = HttpUtil.gethttp(newurl, sessionID);// 返回重定向的页面
-			result = HtmlUtil.getHERF(result,1);// 获取所有的herf ， 比如 查询成绩的herf
-//			System.out.println("打印:" + result);
+			else {
+				//登录成功 插入数据库
+				try {
+					if (!DBUtil.isHaveUser(username)) {//如果不存在，则插入新用户
+						DBUtil.insertUser(username, password);
+					}else {
+						DBUtil.updateUserPassword(username, password);
+					}
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				//System.out.println("result:"+result+"\n newurl:"+newurl);
+				newurl = HttpUtil.IP+newurl;
+				result = HttpUtil.gethttp(newurl, sessionID);// 返回重定向的页面
+				result = HtmlUtil.getHERF(result,1);// 获取所有的herf ， 比如 查询成绩的herf
+				System.out.println("打印:" + result);
+			}
 		}
+		
 		
 		response.setCharacterEncoding("utf-8");
 		PrintWriter out = response.getWriter();

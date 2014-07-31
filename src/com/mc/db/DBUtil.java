@@ -9,6 +9,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
 
+import com.mc.util.Passport;
+
 /**
  * Oracel database connection
  * 
@@ -59,8 +61,10 @@ public class DBUtil {
 	}
 
 	public static void main(String[] args) throws Exception {
-		DBUtil dbUtil = new DBUtil();
-		Connection conn = dbUtil.openConnection();
+		//DBUtil dbUtil = new DBUtil();
+//		updateUserPassword("04113129","chaoking1993");
+		/*Connection conn = dbUtil.openConnection();
+		
 		Statement state = conn.createStatement();
 		ResultSet rs = state.executeQuery("select version,times from apk_version order by id DESC limit 1");
 		try {
@@ -71,7 +75,7 @@ public class DBUtil {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		dbUtil.closeConn(conn);
+		dbUtil.closeConn(conn);*/
 	}
 	
 	/**
@@ -90,7 +94,8 @@ public class DBUtil {
 					result =  false;
 				}
 			}
-			
+			ps.close();
+			rs.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -108,8 +113,9 @@ public class DBUtil {
 		try {
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setString(1, username);
-			ps.setString(2, password);
+			ps.setString(2, Passport.jiami(password));
 			ps.execute();
+			ps.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -122,13 +128,17 @@ public class DBUtil {
 	 * 更新用户
 	 */
 	public static void updateUserPassword(String username,String password){
-		String sql  = "update user set password = ? where username = ?";
+		String sql  = "update xuptscore.users set password = ? where username = ?";
 		Connection conn = DBUtil.openConnection();
 		try {
 			PreparedStatement ps = conn.prepareStatement(sql);
+			System.out.println(Passport.jiami(password));
+			 password = Passport.jiami(password);//加密
 			ps.setString(1, password);
 			ps.setString(2, username);
+			System.out.println("更新成功");
 			ps.execute();
+			ps.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -145,8 +155,9 @@ public class DBUtil {
 		try {
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setString(1, name);
-			ps.setString(2, username);
+			ps.setString(2, username); 
 			ps.execute();
+			ps.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.mc.db.DBUtil;
 import com.mc.util.HtmlUtil;
 import com.mc.util.HttpUtil;
 /**
@@ -73,7 +74,8 @@ public class ChangePasswd extends HttpServlet {
 //		if (!script.trim().equals("ERROR - 出错啦！")) {
 		PrintWriter out = response.getWriter();
 			if (script.split("'")[1].equals("修改成功！")) {
-				
+				//更新数据库
+				DBUtil.updateUserPassword(url.split("=")[1], new_password);
 				out.print("success change");
 			}else {
 				out.print("password error");//原密码错误
