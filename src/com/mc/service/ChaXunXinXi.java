@@ -74,7 +74,7 @@ public class ChaXunXinXi extends HttpServlet {
 						.getParameter("xm"), "utf-8")) + "&gnmkdm="
 				+ request.getParameter("gnmkdm");
 
-//		System.out.println(url);
+		System.out.println(url);
 
 		try {
 			if (!new File(filename).exists()||CalculateFileTime.isRequest(new File(filename))) {
@@ -99,6 +99,7 @@ public class ChaXunXinXi extends HttpServlet {
 		 * 先进行get请求，获取html中 __VIEWSTATE参数的值
 		 */
 		String get_result = HttpUtil.gethttp(HttpUtil.IP + url, session);// 查询为通过的学科
+		System.out.println(HttpUtil.IP + url);
 		// get请求
 		String viewstate = HtmlUtil.getInput(get_result, "__VIEWSTATE");
 		viewstate = URLEncoder.encode(viewstate);// 必须使用编码之后的字符串
@@ -119,7 +120,6 @@ public class ChaXunXinXi extends HttpServlet {
 		String _VIEWSTATE = HtmlUtil.getInput(post_result, "__VIEWSTATE");// 所有的成绩
 		// System.out.println("加密好的成绩:"+_VIEWSTATE);
 
-		// 第一次解密之后的字符串
 		String first_data = new String(BASE64.decryptBASE64(_VIEWSTATE));
 		// String end_data =
 		// first_data.replaceAll("<t[^>]*>|</t>|<td[^>]*>|</td>|<p[^>]*>|</p>|<span[^>]*>|</span>|<o:p[^>]*>|</o:p>",
@@ -203,10 +203,13 @@ public class ChaXunXinXi extends HttpServlet {
 						tableScore.setXq(score.getXq());
 						tableScore.setCj(score.getCj());
 						tableScore.setXf(score.getXf());
-						tableScore.setPscj(score.getPscj());
-						tableScore.setQmcj(score.getQmcj());
+						tableScore.setPscj(score.getPscj()==null?"\\":score.getPscj());
+						tableScore.setQmcj(score.getQmcj()==null?"\\":score.getQmcj());
 						tableScore.setXymc(score.getXymc());
-						tableScore.setKcmc(score.getKcmc());
+						tableScore.setBkcj(score.getBkcj()==null?" ":score.getBkcj());
+						if (score.getKcmc() !=null) {
+							tableScore.setKcmc(score.getKcmc().length()>7?score.getKcmc().substring(0, 7)+"...":score.getKcmc());
+						}
 						tableScore.setKcxz(score.getKcxz());
 						listKeScores.add(tableScore);
 					}
