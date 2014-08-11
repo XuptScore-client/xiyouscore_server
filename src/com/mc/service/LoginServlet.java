@@ -99,6 +99,7 @@ this.doPost(request, response);
 					}else {
 						DBUtil.updateUserPassword(username, password);
 					}
+					DBUtil.updateLoginTimes(username);//更新用户登录次数
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -111,13 +112,26 @@ this.doPost(request, response);
 			}
 		}
 		
+		//将用户账号 插入到 ip中
+		
 		
 		response.setCharacterEncoding("utf-8");
 		PrintWriter out = response.getWriter();
 		out.write(result);
 	}
 	
-	
+	// 获取ip
+		public String getRemortIP(HttpServletRequest request) {
+
+			if (request.getHeader("x-forwarded-for") == null) {
+
+				return request.getRemoteAddr();
+
+			}
+
+			return request.getHeader("x-forwarded-for");
+
+		}
 	 /** 
      * 将容易引起req漏洞的半角字符直接替换成全角字符 
      *  

@@ -12,7 +12,7 @@
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="E:/org.appach.http/httpcomponents-client-4.2.5/lib/commons-codec-1.6.jar">
+	<classpathentry exported="true" kind="lib" path="E:/org.appach.http/httpcomponents-client-4.2.5/lib/commons-codec-1.6.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>

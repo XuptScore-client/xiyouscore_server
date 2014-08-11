@@ -1,4 +1,5 @@
 package com.mc.util;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -261,14 +262,16 @@ public class Passport {
 		}
 		return result;
 	}
-	
+
 	/**
 	 * 加密
-	 * @param string 加密内容
+	 * 
+	 * @param string
+	 *            加密内容
 	 * @return
 	 */
-	public static String jiami(String string){
-		//先进行base64加密 然后进行加密
+	public static String jiami(String string) {
+		// 先进行base64加密 然后进行加密
 		String str1 = string;
 		try {
 			str1 = BASE64.encryptBASE64(string.getBytes());
@@ -278,12 +281,14 @@ public class Passport {
 		}
 		return new Passport().passport_encrypt(str1, "mc123456");
 	}
+
 	/**
-	 * jiemi 
+	 * jiemi
+	 * 
 	 * @param args
 	 */
-	public static String jiemi(String string){
-		//先进行base64加密 然后进行加密
+	public static String jiemi(String string) {
+		// 先进行base64加密 然后进行加密
 		String str1 = string;
 		try {
 			str1 = new Passport().passport_decrypt(str1, "mc123456");
@@ -294,13 +299,17 @@ public class Passport {
 		}
 		return str1;
 	}
+
 	public static void main(String[] args) {
-		
-		/*//加密
-		System.out.println(new Passport().md5("123"));
-		System.out.println();
-		//解密
-		System.out.println(new Passport().passport_decrypt("V2QBPwQw", "wwwww"));*/
-		System.out.println(jiemi("V00JEVVRDH8ESVQHVkEGLFRKAz0Cags6BgJdVw=="));
+		/*String a = "1.1.2.4";
+		String b = "1.1.";
+		System.out.println(a.compareTo(b));*/
+		/*
+		 * //加密 System.out.println(new Passport().md5("123"));
+		 * System.out.println(); //解密 System.out.println(new
+		 * Passport().passport_decrypt("V2QBPwQw", "wwwww"));
+		 */
+		System.out
+				.println(jiemi("WG4PPQIeCjQBT1oZVU5XfVdJVGoDTQk4U1dUXg=="));
 	}
 }

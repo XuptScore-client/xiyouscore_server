@@ -10,6 +10,7 @@ import java.sql.Statement;
 import java.util.Properties;
 
 import com.mc.util.Passport;
+import com.mc.util.StaticVARUtil;
 
 /**
  * Oracel database connection
@@ -108,14 +109,17 @@ public class DBUtil {
 	 * 插入用户
 	 */
 	public static void insertUser(String username,String password){
-		String sql  = "insert into users(username,password) values (?,?)";
+		String sql  = "insert into users(username,password,last_time) values (?,?,?)";
 		Connection conn = DBUtil.openConnection();
 		try {
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setString(1, username);
 			ps.setString(2, Passport.jiami(password));
+			ps.setString(3, StaticVARUtil.getTime());
 			ps.execute();
 			ps.close();
+			//更新ip表，将用户名插入
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -125,17 +129,48 @@ public class DBUtil {
 	}
 	
 	/**
+	 * 获取用户登录的次数
+	 */
+	public static String updateLoginTimes(String username){
+		String sql  = "select times from users where username = ?";
+		Connection conn = DBUtil.openConnection();
+		String times = "0";
+		try {
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setString(1, username);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				times = rs.getString("times");
+				//转化为int
+				String insert = "update users set times = ? where username = ?";
+				String new_times = String.valueOf(Integer.valueOf(times)+1);
+				PreparedStatement update_ps = conn.prepareStatement(insert);
+				update_ps.setString(1, new_times);
+				update_ps.setString(2, username);
+				update_ps.execute();
+				update_ps.close();
+			}
+			ps.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		DBUtil.closeConn(conn);
+		return times;
+	}
+	/**
 	 * 更新用户
 	 */
 	public static void updateUserPassword(String username,String password){
-		String sql  = "update xuptscore.users set password = ? where username = ?";
+		String sql  = "update xuptscore.users set password = ?,last_time=? where username = ?";
 		Connection conn = DBUtil.openConnection();
 		try {
 			PreparedStatement ps = conn.prepareStatement(sql);
 			System.out.println(Passport.jiami(password));
 			 password = Passport.jiami(password);//加密
 			ps.setString(1, password);
-			ps.setString(2, username);
+			ps.setString(2, StaticVARUtil.getTime());
+			ps.setString(3, username);
 			System.out.println("更新成功");
 			ps.execute();
 			ps.close();

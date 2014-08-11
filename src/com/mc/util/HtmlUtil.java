@@ -177,10 +177,11 @@ public class HtmlUtil {
 				// herf = herf + link.getStringText()+"_"
 				// +link.getAttribute("href") + ";";
 				// 返回json格式的数据
-				Herf herf = new Herf();
-				herf.setTittle(link.getStringText());
-				herf.setHerf(link.getAttribute("href"));
-				listHerf.add(herf);
+					Herf herf = new Herf();
+					herf.setTittle(link.getStringText());
+					herf.setHerf(link.getAttribute("href"));
+					listHerf.add(herf);
+				
 
 			} else {
 				if ("here".equals(link.getStringText())) {// 登录

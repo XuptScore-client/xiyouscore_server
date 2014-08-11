@@ -46,20 +46,30 @@ public class CheckVersion extends HttpServlet {
 	 */
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
+		String result = "";
 		String version = request.getParameter("version");
 		Connection connection = DBUtil.openConnection();
 		String query = "select * from apk_version order by id DESC limit 1";// 查询最后一条数据
 		String update = "update apk_version set times=? where version=?";// 更新下载次数
-		String result = "";
+		
 		try {
 			PreparedStatement query_last = connection.prepareStatement(query); // 查询最后一条数据
 			ResultSet rs_query = query_last.executeQuery();
 			PreparedStatement update_last = connection.prepareStatement(update);// 更新下载次数
 
 			while (rs_query.next()) {
-				result = judgeVersion(version, rs_query.getString("version"),
-						rs_query);
+				if (version.compareTo("1.0.11")==0) {//如果 小于1.0.2
+//					result = "/manager/apk/queryscore1.0.2.apk|1.0.2|声明：由于您的版本过低，我们会通过浏览器进行下载，请更新之前先同意卸载|";
+					result = "no";//1.0.11的版本的用户先不更新最新的版本，过一段时间 再更新
+				}else {
+					if (version.compareTo("1.0.11")<0) {
+						result = "/manager/apk/queryscore1.0.11.apk|1.0.11|美化界面，更新部分显示问题|";
+					}else {
+						result = judgeVersion(version, rs_query.getString("version"),
+								rs_query);
+					}
+					
+				}
 				if (!result.equals("no")) {//更新下载次数
 					String times = rs_query.getString("times");// 获取目前下载次数
 					times = String.valueOf(Integer.valueOf(times) + 1);// 次数加1
@@ -75,7 +85,7 @@ public class CheckVersion extends HttpServlet {
 			e.printStackTrace();
 		}
 		DBUtil.closeConn(connection);
-
+		
 		response.setCharacterEncoding("utf-8");
 		PrintWriter out = response.getWriter();
 		out.print(result);
@@ -87,8 +97,7 @@ public class CheckVersion extends HttpServlet {
 	private static String judgeVersion(String oldVersion, String newVersion,
 			ResultSet getVersion) {
 		try {
-			return Double.parseDouble(oldVersion.trim()) < Double
-					.parseDouble(newVersion.trim()) ? getVersion
+			return oldVersion.compareTo(newVersion)<0? getVersion
 					.getString("url")
 					+ "|"
 					+ getVersion.getString("version")
