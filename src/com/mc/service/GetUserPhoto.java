@@ -35,6 +35,9 @@ public class GetUserPhoto extends HttpServlet {
 		String username = request.getParameter("username");
 		String select_user_photo = "select photo from users where username = ?";
 		Connection conn = DBUtil.openConnection();
+		if (conn == null) {
+			return;
+		}
 		try {
 			PreparedStatement ps = conn.prepareStatement(select_user_photo);
 			ps.setString(1, username);

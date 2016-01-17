@@ -1,6 +1,7 @@
 package com.mc.service;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,8 +23,14 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 import com.mc.db.DBUtil;
+import com.mc.util.StaticVARUtil;
 
 public class ChangeUserPhoto extends HttpServlet {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Constructor of the object.
@@ -32,56 +39,65 @@ public class ChangeUserPhoto extends HttpServlet {
 		super();
 	}
 
-	/**
-	 * The doGet method of the servlet. <br>
-	 * 
-	 * This method is called when a form has its tag value method equals to get.
-	 * 
-	 * @param request
-	 *            the request send by the client to the server
-	 * @param response
-	 *            the response send by the server to the client
-	 * @throws ServletException
-	 *             if an error occurred
-	 * @throws IOException
-	 *             if an error occurred
-	 */
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		this.doPut(request, response);
+		this.doPost(request, response);
 	}
 
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
 		String result = "error";
-		String username = request.getParameter("username");// 获取用户名
-        System.out.println(username);
-		// 获得磁盘文件条目工厂。
-		DiskFileItemFactory factory = new DiskFileItemFactory();
-		// 获取文件上传需要保存的路径，user_photo文件夹需存在。
-		String path = request.getSession().getServletContext()
-				.getRealPath("/user_photo");
+		String type = request.getParameter("type");// 获取上传类型
+		System.out.println(type);
+
+		String path = "";
+		String filename = "";
+		if (type.equals("JPEG")) {
+			// 获取文件上传需要保存的路径，user_photo文件夹需存在。
+			path = request.getSession().getServletContext()
+					.getRealPath("/user_photo");
+			try {
+				filename = savePhotoToDB(request.getParameter("username"));
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else if (type.equals("txt")) {
+			path = request.getSession().getServletContext()
+					.getRealPath("/crash_infos");
+		} else if (type.equals("devsdk")) {
+			path = request.getSession().getServletContext()
+					.getRealPath("/user_devsdk_infos");
+		} else if (type.equals("loginmsg")) {
+			path = request.getSession().getServletContext()
+					.getRealPath("/loginMsg");
+			System.out.println("loginmsg");
+		}
+
 		System.out.println("path:" + path);
+		result = SaveFile(request, result, type, path, filename);
+		PrintWriter out = response.getWriter();
+		out.write(result);
+	}
+
+	private String SaveFile(HttpServletRequest request, String result,
+			String type, String path, String filename)
+			throws FileNotFoundException, IOException {
 		if (!new File(path).exists()) {
 			new File(path).mkdir();
 		}
+		// 获得磁盘文件条目工厂。
+		DiskFileItemFactory factory = new DiskFileItemFactory();
 		// 设置暂时存放文件的存储室，这个存储室可以和最终存储文件的文件夹不同。因为当文件很大的话会占用过多内存所以设置存储室。
 		factory.setRepository(new File(path));
 		// 设置缓存的大小，当上传文件的容量超过缓存时，就放到暂时存储室。
 		factory.setSizeThreshold(1024 * 1024);
 		// 上传处理工具类（高水平API上传处理？）
 		ServletFileUpload upload = new ServletFileUpload(factory);
-		String update_user_photo = "update users set photo = ? where username = ?";
-		Connection conn = DBUtil.openConnection();
-		List<FileItem> list;
 		try {
-			PreparedStatement pstmt = conn.prepareStatement(update_user_photo);
-			pstmt.setString(1, "user_photo/" + username + ".JPEG");// 将用户头像
-																	// 路径插入到数据库
-			pstmt.setString(2, username);// 该用户
-			pstmt.execute();
+			List<FileItem> list;
 			list = (List<FileItem>) upload.parseRequest(request);
 			for (FileItem item : list) {
 				// 获取表单属性名字。
@@ -95,11 +111,13 @@ public class ChangeUserPhoto extends HttpServlet {
 				// 如果传入的是非简单字符串，而是图片，音频，视频等二进制文件。
 				else {
 					// 获取路径名
-					String value = item.getName();
-					// 取到最后一个反斜杠。
-					int start = value.lastIndexOf("\\");
-					// 截取上传文件的 字符串名字。+1是去掉反斜杠。
-					String filename = value.substring(start + 1);
+					if (!type.equals("JPEG")) {
+						String value = item.getName();
+						// 取到最后一个反斜杠。
+						int start = value.lastIndexOf("\\");
+						// 截取上传文件的 字符串名字。+1是去掉反斜杠。
+						filename = value.substring(start + 1);
+					}
 					request.setAttribute(name, filename);
 
 					/*
@@ -119,18 +137,26 @@ public class ChangeUserPhoto extends HttpServlet {
 					}
 					in.close();
 					out.close();
-					result = "success";
+					result = filename;
 				}
 			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (FileUploadException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        PrintWriter out = response.getWriter();
-        out.write(result);
+		return result;
 	}
 
+	private String savePhotoToDB(String username) throws SQLException {
+		String update_user_photo = "update users set photo = ? where username = ?";
+		Connection conn = DBUtil.openConnection();
+		String filename = username + System.currentTimeMillis() + ".JPEG";
+		PreparedStatement pstmt = conn.prepareStatement(update_user_photo);
+		pstmt.setString(1, "user_photo/" + filename);// 将用户头像
+		// 路径插入到数据库
+		pstmt.setString(2, username);// 该用户
+		pstmt.execute();
+		return filename;
+
+	}
 }

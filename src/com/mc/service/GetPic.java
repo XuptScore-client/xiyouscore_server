@@ -8,9 +8,6 @@ import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -21,16 +18,15 @@ import model.Session;
 
 import com.mc.db.DBUtil;
 import com.mc.jsonutil.JSONUtil;
-import com.mc.util.CalculateFileTime;
 import com.mc.util.FilePathUtil;
 import com.mc.util.HttpUtil;
-import com.mc.util.StaticVARUtil;
-import com.mc.util.Util;
+import com.mc.util.ImagePreProcess;
 
 public class GetPic extends HttpServlet {
 
 	static String cookie = "";
-	static String jiamiSessionID = "";
+
+	// static String jiamiSessionID = "";
 
 	/**
 	 * Constructor of the object.
@@ -47,20 +43,39 @@ public class GetPic extends HttpServlet {
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		String result = "";
 		Connection conn = DBUtil.openConnection();
-		getSessionID();
-		// saveImage();
+		int i = 0;
+		do {
+			i++;
+			cookie = getSessionID();
 
+			if (i > 4) {
+				cookie = "null";
+				break;
+			}
+		} while (cookie == null);
+		// 
+		long time = System.currentTimeMillis();
+		try {
+			saveImage(time);
+			if(!cookie.equals("null")){
+				cookie = cookie;//+ "&txtSecretCode=" + time
+				System.out.println("textSession:" + cookie);
+			}
+			//TODO error pic
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			System.err.println("getPic:" + e);
+		}
+		
 		Session session = new Session();
 		session.setCookieSessionID(cookie);
-		session.setPicurl(FilePathUtil.picPath);
+		session.setPicurl(FilePathUtil.picPath + "/" + time +".jpg");
 		PrintWriter out = response.getWriter();
 		String json = JSONUtil.toJSON(session);
-		String jsonp = Util.getJsonp(request, json);
+		// String jsonp = Util.getJsonp(request, json);
 		out.write(json);
-		System.out.println(JSONUtil.toJSON(session));
-
 		DBUtil.closeConn(conn);
 	}
 
@@ -82,7 +97,6 @@ public class GetPic extends HttpServlet {
 		InputStream inputStream = null;
 		HttpURLConnection httpURLConnection = null;
 		try {
-
 			URL url = new URL(HttpUtil.pic_url);
 			if (url != null) {
 				httpURLConnection = (HttpURLConnection) url.openConnection();
@@ -94,7 +108,7 @@ public class GetPic extends HttpServlet {
 					inputStream = httpURLConnection.getInputStream();
 				}
 			}
-
+					System.out.println("getInputstream");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -103,6 +117,9 @@ public class GetPic extends HttpServlet {
 
 	}
 
+	public static void main(String[] args) {
+		getSessionID();
+	}
 	/**
 	 * 获取 session
 	 */
@@ -112,21 +129,26 @@ public class GetPic extends HttpServlet {
 		try {
 			// Proxy proxy = new Proxy(Type.HTTP, new
 			// InetSocketAddress("localhost", 8888));
-			URL url = new URL(HttpUtil.BASE_URL/* +"default_ysdx.aspx" */);
+			/*
+			 * if (!HttpUtil.IsReachIP(url_ip.split("/")[2])) { url_ip =
+			 * url_ip.replace(url_ip.split("/")[2], HttpUtil.IP_BACKUP);//启用
+			 * 备用服务器 }
+			 */
+			URL url = new URL(HttpUtil.BASE_URL + HttpUtil.LOGIN_URL);
 			if (url != null) {
 				httpURLConnection = (HttpURLConnection) url.openConnection();
 				httpURLConnection.setDoOutput(true);
 				httpURLConnection.setDoInput(true);
 				httpURLConnection.setUseCaches(false);
-				httpURLConnection.setConnectTimeout(6000);// 最大延迟6000毫秒
+				httpURLConnection.setConnectTimeout(60000);// 最大延迟6000毫秒
 				String sessionid = null;
 				String cookieval = httpURLConnection
 						.getHeaderField("set-cookie");
 				if (cookieval != null) {
 					sessionid = cookieval.substring(0, cookieval.indexOf(";"));
-					// System.out.println(sessionid);
 				}
-				cookie = sessionid;
+				System.out.println("session:"+sessionid);
+				return sessionid;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -137,18 +159,19 @@ public class GetPic extends HttpServlet {
 	/**
 	 * 保存图片
 	 */
-	public static synchronized void saveImage() {
+
+	public static synchronized void saveImage(long time) {
 		InputStream inputStream = getInputStream();
 		FileOutputStream fileOutputStream = null;
 		byte[] data = new byte[1024];
 		int len = 0;
 		try {
-			File file = new File(FilePathUtil.tomcatPath + "\\2.jpg");
+			File file = new File(FilePathUtil.tomcatPath + "/" + time +".jpg");
 			if (!file.exists()) {
+				System.out.println("createFile");
 				file.createNewFile();
 			}
-			fileOutputStream = new FileOutputStream(FilePathUtil.tomcatPath
-					+ "\\2.jpg");
+			fileOutputStream = new FileOutputStream(FilePathUtil.tomcatPath + "/" + time +".jpg");
 			while ((len = inputStream.read(data)) != -1) {
 				fileOutputStream.write(data, 0, len);
 
@@ -165,11 +188,11 @@ public class GetPic extends HttpServlet {
 					fileOutputStream.close();
 				}
 
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
+			} catch (IOException e) { // TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 
 	}
+
 }

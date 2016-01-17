@@ -74,6 +74,111 @@
     <servlet-name>GetUserPhoto</servlet-name>
     <servlet-class>com.mc.service.GetUserPhoto</servlet-class>
   </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>RegistMassageServlet</servlet-name>
+    <servlet-class>com.mc.service.RegistMassageServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>RefreshServlet</servlet-name>
+    <servlet-class>com.mc.service.RefreshServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>NoticeServlet</servlet-name>
+    <servlet-class>com.mc.service.NoticeServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>PersonalInformation</servlet-name>
+    <servlet-class>com.mc.service.PersonalInformation</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>RankServlet</servlet-name>
+    <servlet-class>com.mc.service.RankServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>PushDevSdk</servlet-name>
+    <servlet-class>com.mc.service.PushDevSdk</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>NotificationServlet</servlet-name>
+    <servlet-class>com.mc.service.NotificationServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>isPollDownViewServlet</servlet-name>
+    <servlet-class>com.mc.service.isPollDownViewServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>McUploadPollImage</servlet-name>
+    <servlet-class>com.mc.service.McUploadPollImage</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>GetPollImageTimeIspoll</servlet-name>
+    <servlet-class>com.mc.service.GetPollImageTimeIspoll</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>FriendRecommondServlet</servlet-name>
+    <servlet-class>com.mc.service.FriendRecommondServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>IdeaBackServlet</servlet-name>
+    <servlet-class>com.mc.service.IdeaBackServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>ScoreStatisticalServlet</servlet-name>
+    <servlet-class>com.mc.service.ScoreStatisticalServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>CetServlet</servlet-name>
+    <servlet-class>com.mc.service.CetServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>ForgetCetServlet</servlet-name>
+    <servlet-class>com.mc.service.ForgetCetServlet</servlet-class>
+  </servlet>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -129,5 +234,65 @@
   <servlet-mapping>
     <servlet-name>GetUserPhoto</servlet-name>
     <url-pattern>/getuserphoto.jsp</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>RegistMassageServlet</servlet-name>
+    <url-pattern>/RegistMassageServlet.jsp</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>RefreshServlet</servlet-name>
+    <url-pattern>/RefreshServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>NoticeServlet</servlet-name>
+    <url-pattern>/NoticeServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>PersonalInformation</servlet-name>
+    <url-pattern>/pinformation.jsp</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>RankServlet</servlet-name>
+    <url-pattern>/RankServlet.jsp</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>PushDevSdk</servlet-name>
+    <url-pattern>/pushdevsdk</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>NotificationServlet</servlet-name>
+    <url-pattern>/NotificationServlet.jsp</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>isPollDownViewServlet</servlet-name>
+    <url-pattern>/isPollDownViewServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>McUploadPollImage</servlet-name>
+    <url-pattern>/servlet/McUploadPollImage</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>GetPollImageTimeIspoll</servlet-name>
+    <url-pattern>/GetPollImageTimeIspoll</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>FriendRecommondServlet</servlet-name>
+    <url-pattern>/FriendRecommondServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>IdeaBackServlet</servlet-name>
+    <url-pattern>/servlet/IdeaBackServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ScoreStatisticalServlet</servlet-name>
+    <url-pattern>/servlet/ScoreStatisticalServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>CetServlet</servlet-name>
+    <url-pattern>/servlet/CetServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ForgetCetServlet</servlet-name>
+    <url-pattern>/servlet/ForgetCetServlet</url-pattern>
   </servlet-mapping>
 </web-app>

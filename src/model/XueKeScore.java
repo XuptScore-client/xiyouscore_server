@@ -8,6 +8,7 @@ package model;
  */
 public class XueKeScore {
 
+	private String kcdm;//课程代码
 	private String xn;// 学年
 	private String xq;// 学期
 	private String kcmc;// 课程
@@ -18,6 +19,14 @@ public class XueKeScore {
 	private String cj;// 最终成绩
 	private String xymc;// 学院
 	private String bkcj;// 补考成绩
+
+	public String getKcdm() {
+		return kcdm;
+	}
+
+	public void setKcdm(String kcdm) {
+		this.kcdm = kcdm;
+	}
 
 	public String getBkcj() {
 		return bkcj;

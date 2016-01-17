@@ -58,13 +58,16 @@ public class HtmlUtil {
 		 */
 		return result;
 	}
+
 	/**
 	 * 获取input中的值
+	 * 
 	 * @param html
-	 * @param name input中name得值
+	 * @param name
+	 *            input中name得值
 	 * @return
 	 */
-	public static String getHtmlInput(String html,String name) {
+	public static String getHtmlInput(String html, String name) {
 		String result = "server_preserve";// 服务器 维护
 		// 创建Parser对象根据传给字符串和指定的编码
 		Parser parser = Parser.createParser(html, "GBK");
@@ -84,65 +87,68 @@ public class HtmlUtil {
 		// 得到所有过滤后，想要的节点
 		nodelist = nodelist.extractAllNodesThatMatch(filter, true);
 		for (int i = 0; i < nodelist.size(); i++) {
-//			System.out.println("\n");
+			// System.out.println("\n");
 			LinkTag link = (LinkTag) nodelist.elementAt(i);
- 
-			//InputTag inputTag 
-			if (link.getAttribute("name").equals(name)) {//get到 下一次post请求要用的参数
+
+			// InputTag inputTag
+			if (link.getAttribute("name").equals(name)) {// get到 下一次post请求要用的参数
 				result = link.getAttribute("value");
 			}
 		}
 		return result;
 	}
-	
+
 	/**
-	 * 测试OrFilter的用法  获取  input 或者select中的值
+	 * 测试OrFilter的用法 获取 input 或者select中的值
+	 * 
 	 * @param html
-	 * @param name 要获取的input name值
+	 * @param name
+	 *            要获取的input name值
 	 */
-    public static String getInput(String html,String name) {
-    	String result = "";
-        NodeFilter inputFilter = new NodeClassFilter(InputTag.class);
-        NodeFilter selectFilter = new NodeClassFilter(SelectTag.class);
-        Parser myParser;
-        NodeList nodeList = null;
-        try {
-            Parser parser = new Parser();
-            parser
-                    .setInputHTML(html);
-            parser.setEncoding(parser.getEncoding());
-            OrFilter lastFilter = new OrFilter();
-            lastFilter.setPredicates(new NodeFilter[] { selectFilter,
-                    inputFilter });
-            nodeList = parser.parse(lastFilter);
-            for (int i = 0; i <= nodeList.size(); i++) {
-                if (nodeList.elementAt(i) instanceof InputTag) {
-                    InputTag tag = (InputTag) nodeList.elementAt(i);
-                  /*  System.out.println("OrFilter tag name is :" + tag.getTagName()
-                            + " ,tag value is:" + tag.getAttribute("value"));*/
-                    if (tag.getAttribute("name").equals(name)) {
+	public static String getInput(String html, String name) {
+		String result = "";
+		NodeFilter inputFilter = new NodeClassFilter(InputTag.class);
+		NodeFilter selectFilter = new NodeClassFilter(SelectTag.class);
+		Parser myParser;
+		NodeList nodeList = null;
+		try {
+			Parser parser = new Parser();
+			parser.setInputHTML(html);
+			parser.setEncoding(parser.getEncoding());
+			OrFilter lastFilter = new OrFilter();
+			lastFilter.setPredicates(new NodeFilter[] { selectFilter,
+					inputFilter });
+			nodeList = parser.parse(lastFilter);
+			for (int i = 0; i <= nodeList.size(); i++) {
+				if (nodeList.elementAt(i) instanceof InputTag) {
+					InputTag tag = (InputTag) nodeList.elementAt(i);
+					/*
+					 * System.out.println("OrFilter tag name is :" +
+					 * tag.getTagName() + " ,tag value is:" +
+					 * tag.getAttribute("value"));
+					 */
+					if (tag.getAttribute("name").equals(name)) {
 						result = tag.getAttribute("value");
 					}
-                }
-               /* if (nodeList.elementAt(i) instanceof SelectTag) {
-                    SelectTag tag = (SelectTag) nodeList.elementAt(i);
-                    NodeList list = tag.getChildren();
-                    for (int j = 0; j < list.size(); j++) {
-                        OptionTag option = (OptionTag) list.elementAt(j);
-                        System.out.println("OrFilter Option"
-                                        + option.getOptionText());
-                    }
-                }*/
-            }
-        } catch (ParserException e) {
-            e.printStackTrace();
-        }
-        return result;
-    }
-	
-	
+				}
+				/*
+				 * if (nodeList.elementAt(i) instanceof SelectTag) { SelectTag
+				 * tag = (SelectTag) nodeList.elementAt(i); NodeList list =
+				 * tag.getChildren(); for (int j = 0; j < list.size(); j++) {
+				 * OptionTag option = (OptionTag) list.elementAt(j);
+				 * System.out.println("OrFilter Option" +
+				 * option.getOptionText()); } }
+				 */
+			}
+		} catch (ParserException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
 	/**
 	 * 获取 herf
+	 * 
 	 * @param html
 	 * @param herfName
 	 * @return
@@ -152,7 +158,7 @@ public class HtmlUtil {
 
 		String result = "server_preserve";// 服务器 维护
 		// 创建Parser对象根据传给字符串和指定的编码
-		Parser parser = Parser.createParser(html, "GBK");
+		Parser parser = Parser.createParser(html, "utf-8");
 		// 创建HtmlPage对象HtmlPage(Parser parser)
 		HtmlPage page = new HtmlPage(parser);
 		try {
@@ -169,19 +175,25 @@ public class HtmlUtil {
 		// 得到所有过滤后，想要的节点
 		nodelist = nodelist.extractAllNodesThatMatch(filter, true);
 		List<Herf> listHerf = new ArrayList<Herf>();// json格式
+		String username = "";//学号
+		String xm = "";//姓名
 		for (int i = 0; i < nodelist.size(); i++) {
-//			System.out.println("\n");
+			// System.out.println("\n");
 			LinkTag link = (LinkTag) nodelist.elementAt(i);
 
 			if (flag == 1) {// 所有链接
 				// herf = herf + link.getStringText()+"_"
 				// +link.getAttribute("href") + ";";
 				// 返回json格式的数据
-					Herf herf = new Herf();
-					herf.setTittle(link.getStringText());
-					herf.setHerf(link.getAttribute("href"));
-					listHerf.add(herf);
-				
+				Herf herf = new Herf();
+				herf.setTittle(link.getStringText());
+				herf.setHerf(link.getAttribute("href"));
+				if (herf.getTittle().equals("\u4e2a\u4eba\u4fe1\u606f")) {//如果是个人信息，则将名字和学号获取
+					String[] msg = herf.getHerf().split("&");
+					username = msg[0].split("=")[1];
+					xm = msg[1].split("=")[1];
+				}
+				listHerf.add(herf);
 
 			} else {
 				if ("here".equals(link.getStringText())) {// 登录
@@ -191,6 +203,8 @@ public class HtmlUtil {
 				}
 			}
 		}
+		//由于学校官网服务器关闭所以 在这主动添加 查成绩的地址
+		listHerf = setCXHerf(listHerf, username, xm);
 		if (flag == 1) {// 将所有的herf整合成Json数据
 			HerfDAO herfDAO = new HerfDAO();
 			herfDAO.setListHerf(listHerf);
@@ -200,6 +214,20 @@ public class HtmlUtil {
 		return result;
 	}
 
+	/**
+	 * 将 成绩查询的 信息添加
+	 * @param listHerf
+	 * @param username
+	 * @param xm
+	 * @return
+	 */
+	private static List<Herf> setCXHerf(List<Herf> listHerf,String username,String xm){
+		Herf herf = new Herf();
+		herf.setTittle("\u6210\u7ee9\u67e5\u8be2");
+		herf.setHerf("xscjcx.aspx?xh="+username+"&xm="+xm+"&gnmkdm=N121605");
+		listHerf.add(herf);
+		return listHerf;
+	}
 	/**
 	 * 获取tittle
 	 */
@@ -221,7 +249,7 @@ public class HtmlUtil {
 		}
 
 		System.out.println("==============fdf==========================");
-//		System.out.println(tittle);
+		// System.out.println(tittle);
 		return tittle;
 	}
 
@@ -340,9 +368,10 @@ public class HtmlUtil {
 					body = body + "\n";
 				}
 			}
-			
-			if(displaymode.equals("")) {
-				for (int i = 0; i < nodeList.size(); i++) { // for (int i = 0; i <
+
+			if (displaymode.equals("")) {
+				for (int i = 0; i < nodeList.size(); i++) { // for (int i = 0; i
+															// <
 					// nodeList.size(); i++) { 获取首页
 					// 个人信息 从第10 行 到17行
 					// 获取tr
@@ -368,7 +397,7 @@ public class HtmlUtil {
 		 */
 		return body;
 	}
-	
+
 	/**
 	 * 删除Html标签，获取script中的值
 	 * 
@@ -376,35 +405,36 @@ public class HtmlUtil {
 	 * @return
 	 */
 	public static String htmlRemoveTag(String inputString) {
-	    if (inputString == null)
-	        return null;
-	    String htmlStr = inputString; // 含html标签的字符串
-	    String textStr = "";
-	    java.util.regex.Pattern p_script;
-	    java.util.regex.Matcher m_script;
-	    java.util.regex.Pattern p_style;
-	    java.util.regex.Matcher m_style;
-	    java.util.regex.Pattern p_html;
-	    java.util.regex.Matcher m_html;
-	    try {
-	        //定义script的正则表达式{或<script[^>]*?>[\\s\\S]*?<\\/script>
-	        String regEx_script = "<[\\s]*?script[^>]*?>[\\s\\S]*?<[\\s]*?\\/[\\s]*?script[\\s]*?>"; 
-	        //定义style的正则表达式{或<style[^>]*?>[\\s\\S]*?<\\/style>
-	        String regEx_style = "<[\\s]*?style[^>]*?>[\\s\\S]*?<[\\s]*?\\/[\\s]*?style[\\s]*?>"; 
-	        String regEx_html = "<[^>]+>"; // 定义HTML标签的正则表达式
-	       /* p_script = Pattern.compile(regEx_script, Pattern.CASE_INSENSITIVE);
-	        m_script = p_script.matcher(htmlStr);
-	        htmlStr = m_script.replaceAll(""); // 过滤script标签
-*/	        p_style = Pattern.compile(regEx_style, Pattern.CASE_INSENSITIVE);
-	        m_style = p_style.matcher(htmlStr);
-	        htmlStr = m_style.replaceAll(""); // 过滤style标签
-	        p_html = Pattern.compile(regEx_html, Pattern.CASE_INSENSITIVE);
-	        m_html = p_html.matcher(htmlStr);
-	        htmlStr = m_html.replaceAll(""); // 过滤html标签
-	        textStr = htmlStr;
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    }
-	    return textStr;// 返回文本字符串
+		if (inputString == null)
+			return null;
+		String htmlStr = inputString; // 含html标签的字符串
+		String textStr = "";
+		java.util.regex.Pattern p_script;
+		java.util.regex.Matcher m_script;
+		java.util.regex.Pattern p_style;
+		java.util.regex.Matcher m_style;
+		java.util.regex.Pattern p_html;
+		java.util.regex.Matcher m_html;
+		try {
+			// 定义script的正则表达式{或<script[^>]*?>[\\s\\S]*?<\\/script>
+			String regEx_script = "<[\\s]*?script[^>]*?>[\\s\\S]*?<[\\s]*?\\/[\\s]*?script[\\s]*?>";
+			// 定义style的正则表达式{或<style[^>]*?>[\\s\\S]*?<\\/style>
+			String regEx_style = "<[\\s]*?style[^>]*?>[\\s\\S]*?<[\\s]*?\\/[\\s]*?style[\\s]*?>";
+			String regEx_html = "<[^>]+>"; // 定义HTML标签的正则表达式
+			/*
+			 * p_script = Pattern.compile(regEx_script,
+			 * Pattern.CASE_INSENSITIVE); m_script = p_script.matcher(htmlStr);
+			 * htmlStr = m_script.replaceAll(""); // 过滤script标签
+			 */p_style = Pattern.compile(regEx_style, Pattern.CASE_INSENSITIVE);
+			m_style = p_style.matcher(htmlStr);
+			htmlStr = m_style.replaceAll(""); // 过滤style标签
+			p_html = Pattern.compile(regEx_html, Pattern.CASE_INSENSITIVE);
+			m_html = p_html.matcher(htmlStr);
+			htmlStr = m_html.replaceAll(""); // 过滤html标签
+			textStr = htmlStr;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return textStr;// 返回文本字符串
 	}
 }

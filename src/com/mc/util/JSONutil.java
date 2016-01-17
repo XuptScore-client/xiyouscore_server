@@ -14,7 +14,6 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
 import com.mc.jsonutil.JSONUtil;
-import com.sun.xml.internal.txw2.Document;
 
 import dao.XueKeScoreDAO;
 

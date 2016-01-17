@@ -55,31 +55,31 @@ public class ChaXunXinXi1 extends HttpServlet {
 
 		String session = request.getParameter("session");
 		String username = request.getParameter("username");
-		String name = URLEncoder.encode(URLDecoder.decode(request
-				.getParameter("xm"), "utf-8"));
+		String name = URLEncoder.encode(URLDecoder.decode(
+				request.getParameter("xm"), "utf-8"));
 		System.out.println(name);
-		String filename = username;//将学号作为 文件名
+		String filename = username;// 将学号作为 文件名
 		String root_path = request.getSession().getServletContext()
 				.getRealPath(request.getRequestURI());
-		root_path = root_path.substring(0, root_path.lastIndexOf("xupt"))+ "student_score/";
+		root_path = root_path.substring(0, root_path.lastIndexOf("xupt"))
+				+ "student_score/";
 		File file = new File(root_path);
 		if (!file.exists()) {
-			file.mkdirs();//创建保存 学生 xml的文件夹
+			file.mkdirs();// 创建保存 学生 xml的文件夹
 		}
-		//将用户的名字保存到数据库
+		// 将用户的名字保存到数据库
 		DBUtil.insertUserName(filename, name);
-		
-		filename = root_path+filename + ".xml";//文件名
-		
-		String url = "xscjcx.aspx?xh="+username
-				+ "&xm="
-				+ name + "&gnmkdm="
+
+		filename = root_path + filename + ".xml";// 文件名
+
+		String url = "xscjcx.aspx?xh=" + username + "&xm=" + name + "&gnmkdm="
 				+ "gnmkdm=N121605";
 
 		System.out.println(url);
 
 		try {
-			if (!new File(filename).exists()||CalculateFileTime.isRequest(new File(filename))) {
+			if (!new File(filename).exists()
+					|| CalculateFileTime.isRequest(new File(filename))) {
 				requestHttpGetXML(session, filename, url);
 			}
 			String json_result = getJson(filename);
@@ -100,8 +100,8 @@ public class ChaXunXinXi1 extends HttpServlet {
 		/**
 		 * 先进行get请求，获取html中 __VIEWSTATE参数的值
 		 */
-		String get_result = HttpUtil.gethttp(HttpUtil.IP + url, session);// 查询为通过的学科
-		System.out.println(HttpUtil.IP + url);
+		String get_result = HttpUtil.gethttp(HttpUtil.BASE_URL + url, session);// 查询为通过的学科
+		System.out.println(HttpUtil.BASE_URL + url);
 		// get请求
 		String viewstate = HtmlUtil.getInput(get_result, "__VIEWSTATE");
 		viewstate = URLEncoder.encode(viewstate);// 必须使用编码之后的字符串
@@ -118,7 +118,8 @@ public class ChaXunXinXi1 extends HttpServlet {
 		map.put("ddlXQ", "");
 		map.put("ddl_kcxz", "");
 		map.put("btn_zcj", "%C0%FA%C4%EA%B3%C9%BC%A8");
-		String post_result = HttpUtil.http(HttpUtil.IP + url, map, session);
+		String post_result = HttpUtil.http(HttpUtil.BASE_URL + url, map,
+				session);
 		String _VIEWSTATE = HtmlUtil.getInput(post_result, "__VIEWSTATE");
 
 		String first_data = new String(BASE64.decryptBASE64(_VIEWSTATE));
@@ -136,12 +137,13 @@ public class ChaXunXinXi1 extends HttpServlet {
 		// System.out.println(end_data);
 		String _end_data = new String(BASE64.decryptBASE64(end_data), "utf-8");
 
-		_end_data = _end_data.substring(_end_data.indexOf("<?xml"), _end_data
-				.indexOf("ram>"))
+		_end_data = _end_data.substring(_end_data.indexOf("<?xml"),
+				_end_data.indexOf("ram>"))
 				+ "ram>";
 		// 替换xml中不合法的字符
-		_end_data = _end_data.replace(_end_data.substring(_end_data
-				.indexOf("<xs:schema"), _end_data.indexOf("<diffgr")), " ");
+		_end_data = _end_data.replace(
+				_end_data.substring(_end_data.indexOf("<xs:schema"),
+						_end_data.indexOf("<diffgr")), " ");
 		_end_data = _end_data.replace("utf-16", "UTF-8");
 		// System.out.println(_end_data);
 		// String json = JSONutil.get_JSON(_end_data);
@@ -204,11 +206,16 @@ public class ChaXunXinXi1 extends HttpServlet {
 						tableScore.setXq(score.getXq());
 						tableScore.setCj(score.getCj());
 						tableScore.setXf(score.getXf());
-						tableScore.setPscj(score.getPscj()==null?"\\":score.getPscj());
-						tableScore.setQmcj(score.getQmcj()==null?"\\":score.getQmcj());
+						tableScore.setPscj(score.getPscj() == null ? "\\"
+								: score.getPscj());
+						tableScore.setQmcj(score.getQmcj() == null ? "\\"
+								: score.getQmcj());
 						tableScore.setXymc(score.getXymc());
-						if (score.getKcmc() !=null) {
-							tableScore.setKcmc(score.getKcmc().length()>7?score.getKcmc().substring(0, 7)+"...":score.getKcmc());
+						if (score.getKcmc() != null) {
+							tableScore
+									.setKcmc(score.getKcmc().length() > 7 ? score
+											.getKcmc().substring(0, 7) + "..."
+											: score.getKcmc());
 						}
 						tableScore.setKcxz(score.getKcxz());
 						listKeScores.add(tableScore);
@@ -220,7 +227,7 @@ public class ChaXunXinXi1 extends HttpServlet {
 			ScoreModelDAO scoreModelDAO = new ScoreModelDAO();
 			scoreModelDAO.setLiScoreModels(listTableScore);
 			json_score = JSONUtil.toJSON(scoreModelDAO);
-//			System.out.println("json:" + json_score);
+			// System.out.println("json:" + json_score);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -234,7 +241,7 @@ public class ChaXunXinXi1 extends HttpServlet {
 	private InputStream getStringStream(String filename) {
 		InputStream in = null;
 		try {
-//			System.out.println("读文件" + filename);
+			// System.out.println("读文件" + filename);
 			in = new FileInputStream(filename);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block

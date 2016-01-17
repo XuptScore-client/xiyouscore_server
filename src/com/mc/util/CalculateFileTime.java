@@ -13,7 +13,7 @@ import java.util.Date;
  */
 public class CalculateFileTime {
 
-	private static final long DIFFERENT_DAY = 100;// 差的天数
+	private static final long DIFFERENT_DAY = 1;// 差的天数
 	private static final long DIFFERENT_TIME = 1;// 差的秒数
 
 	/**
@@ -50,40 +50,36 @@ public class CalculateFileTime {
 	}
 
 	/**
-	 * 现在时间 比上次时间大两秒
-	 * 
-	 * @param last_time
-	 * @return
+	 * 比较两个时间的差值
+	 * @param last_time 老的时间
+	 * @param new_time 最新时间
+	 * @return  
 	 */
-	public static Boolean isRequest(String last_time, String new_time) {
-
-		String dd = last_time;
-
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	public static Boolean isRequest(File Ifile,long DIFFERENT_TIME) {
+		long modifiedTime = Ifile.lastModified();
+		Date date = new Date(modifiedTime);
+		SimpleDateFormat mode_sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String dd = mode_sdf.format(date);// 文件的修改时间
 		/* Date currentTime=new Date(); */
 		// 将截取到的时间字符串转化为时间格式的字符串
 		Date beginTime = null;
 		try {
-			beginTime = sdf.parse(dd);
+			beginTime = mode_sdf.parse(dd);
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		/* Date currentTime=new Date(); */
 		// 将截取到的时间字符串转化为时间格式的字符串
-		Date beginTime1 = null;
-		try {
-			beginTime1 = sdf.parse(new_time);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		// 默认为毫秒，除以1000是为了转换成秒
-		long interval = (beginTime1.getTime() - beginTime.getTime()) / 1000;// 秒
-		long second = interval % 60;// 秒
-		boolean a = second > DIFFERENT_TIME;
+		Date currentTime = new Date();
+				long interval = (currentTime.getTime() - beginTime.getTime()) / 1000;// 秒
+				long day = interval / (24 * 3600);// 天
+				long hour = interval % (24 * 3600) / 3600;// 小时
+				long minute = interval % 3600 / 60;// 分钟
+				long second = interval % 60;// 秒
 		System.out.println("两个时间相差：" 
-				+ second + "秒  +  " +DIFFERENT_TIME+ a);
-		return second < DIFFERENT_TIME ? true : false;
+				+ hour + "小时  +  " +DIFFERENT_TIME);
+		return hour > DIFFERENT_TIME ? true : false;
 	}
 }

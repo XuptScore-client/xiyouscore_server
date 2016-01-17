@@ -1,7 +1,8 @@
 package com.mc.util;
 
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
+import Decoder.BASE64Decoder;
+import Decoder.BASE64Encoder;
+
 
 /**   
  * BASE64º”√‹Ω‚√‹   

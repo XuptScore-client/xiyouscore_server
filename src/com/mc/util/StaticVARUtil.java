@@ -10,7 +10,7 @@ import java.util.Date;
  */
 public class StaticVARUtil {
 
-	public static final String[] xn = {"2011-2012","2012-2013","2013-2014","2014-2015"};
+	public static final String[] xn = {"2012-2013","2013-2014","2014-2015","2015-2016"};
 	/**
 	 * 获取系统时间
 	 */
@@ -20,7 +20,7 @@ public class StaticVARUtil {
 		return sdf.format(new Date());
 	}
 	public static String getTime1(){
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
 		System.out.println();
 		return sdf.format(new Date());
 	}

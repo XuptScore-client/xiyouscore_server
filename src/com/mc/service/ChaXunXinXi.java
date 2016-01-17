@@ -28,16 +28,26 @@ import model.XueKeScore;
 
 import com.mc.db.DBUtil;
 import com.mc.jsonutil.JSONUtil;
+import com.mc.thread.MyThread;
+import com.mc.thread.ThreadMain;
 import com.mc.util.BASE64;
 import com.mc.util.CalculateFileTime;
+import com.mc.util.ChaXunChengJiUtil;
+import com.mc.util.FileEncryptAndDecrypt;
 import com.mc.util.HtmlUtil;
 import com.mc.util.HttpUtil;
+import com.mc.util.Passport;
 import com.mc.util.StaticVARUtil;
 import com.mc.xml.parse.SaxScoreParser;
 
 import dao.ScoreModelDAO;
 
 public class ChaXunXinXi extends HttpServlet {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	public ChaXunXinXi() {
 		super();
@@ -53,122 +63,85 @@ public class ChaXunXinXi extends HttpServlet {
 			throws ServletException, IOException {
 
 		String session = request.getParameter("session");
-		String filename = request.getParameter("url").split("=")[1];//将学号作为 文件名
-		String root_path = request.getSession().getServletContext()
-				.getRealPath(request.getRequestURI());
-		root_path = root_path.substring(0, root_path.lastIndexOf("xupt"))+ "student_score/";
-		File file = new File(root_path);
-		if (!file.exists()) {
-			file.mkdirs();//创建保存 学生 xml的文件夹
-		}
-		String name = URLDecoder.decode(request
-				.getParameter("xm"), "utf-8");//用户名
-		//将用户的名字保存到数据库
-		DBUtil.insertUserName(filename, name);
-		
-		filename = root_path+filename + ".xml";//文件名
-		
-		String url = request.getParameter("url")
-				+ "&xm="
-				+ URLEncoder.encode(URLDecoder.decode(request
-						.getParameter("xm"), "utf-8")) + "&gnmkdm="
-				+ request.getParameter("gnmkdm");
-
-		System.out.println(url);
-
+		String filename = request.getParameter("url").split("=")[1];// 将学号作为 文件名
+		String name = URLDecoder.decode(request.getParameter("xm"), "utf-8");// 用户名
+		String xh = filename;
+		// 将用户的名字保存到数据库
+		System.out.println("将用户名插入数据库");
 		try {
-			if (!new File(filename).exists()||CalculateFileTime.isRequest(new File(filename))) {
-				requestHttpGetXML(session, filename, url);
-			}
-			String json_result = getJson(filename);
-
-			response.setCharacterEncoding("utf-8");
-			PrintWriter out = response.getWriter();
-			// out.print(_end_data);//返回xml
-			out.print(json_result);// 返回json
-			// System.out.println(_end_data);
+			DBUtil.insertUserName(filename, name);// 在这个方法中增加了 判断是否已经更新了学生姓名。
+													// 保证了
+			// url 不能通过自己学号去更改别人的姓名。
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			// TODO: handle exception
 		}
-	}
 
-	private void requestHttpGetXML(String session, String filename, String url)
-			throws Exception, UnsupportedEncodingException {
+		response.setCharacterEncoding("utf-8");
+		PrintWriter out = response.getWriter();
+		// 修复漏洞 查询成绩 修改xh 可以查询到其他人的成绩。
 		/**
-		 * 先进行get请求，获取html中 __VIEWSTATE参数的值
+		 * 查询数据库该学号和姓名是否对应
 		 */
-		String get_result = HttpUtil.gethttp(HttpUtil.IP + url, session);// 查询为通过的学科
-		System.out.println(HttpUtil.IP + url);
-		// get请求
-		String viewstate = HtmlUtil.getInput(get_result, "__VIEWSTATE");
-		viewstate = URLEncoder.encode(viewstate);// 必须使用编码之后的字符串
-		/*
-		 * System.out.println(); System.out.println(viewstate);
-		 */
+		if (!DBUtil.checkXhAndName(name, filename)) {// 学号和姓名不能匹配
+			System.out.println("ip warning!!!");
+			out.print("ip warning!!!");
+		} else {
 
-		Map<String, String> map = new HashMap<String, String>();
-		map.put("__EVENTTARGET", "");
-		map.put("__EVENTARGUMENT", "");
-		map.put("__VIEWSTATE", viewstate);
-		map.put("hidLanguage", "");
-		map.put("ddlXN", "");
-		map.put("ddlXQ", "");
-		map.put("ddl_kcxz", "");
-		map.put("btn_zcj", "%C0%FA%C4%EA%B3%C9%BC%A8");
-		String post_result = HttpUtil.http(HttpUtil.IP + url, map, session);
-		String _VIEWSTATE = HtmlUtil.getInput(post_result, "__VIEWSTATE");// 所有的成绩
-		// System.out.println("加密好的成绩:"+_VIEWSTATE);
-
-		String first_data = new String(BASE64.decryptBASE64(_VIEWSTATE));
-		// String end_data =
-		// first_data.replaceAll("<t[^>]*>|</t>|<td[^>]*>|</td>|<p[^>]*>|</p>|<span[^>]*>|</span>|<o:p[^>]*>|</o:p>",
-		// "");
-		// System.out.println(first_data);
-		Pattern p = Pattern.compile("b<(.*?)>;");
-		java.util.regex.Matcher m = p.matcher(first_data);
-		String end_data = "";// 保存平时成绩的
-
-		while (m.find()) {
-			end_data = m.group(1);
-		}
-		// System.out.println(end_data);
-		String _end_data = new String(BASE64.decryptBASE64(end_data), "utf-8");
-
-		_end_data = _end_data.substring(_end_data.indexOf("<?xml"), _end_data
-				.indexOf("ram>"))
-				+ "ram>";
-		// 替换xml中不合法的字符
-		_end_data = _end_data.replace(_end_data.substring(_end_data
-				.indexOf("<xs:schema"), _end_data.indexOf("<diffgr")), " ");
-		_end_data = _end_data.replace("utf-16", "UTF-8");
-		// System.out.println(_end_data);
-		// String json = JSONutil.get_JSON(_end_data);
-		// System.out.println(_end_data);
-		// 将xml写入文件
-		writeXML(_end_data, filename);
-	}
-
-	/**
-	 * 写文件 将xml写入 自己的.xml文件中
-	 */
-	private void writeXML(String xml, String filename) {
-		File saveFile;
-		try {
-			saveFile = new File(filename);
-			if (!saveFile.exists()) {
-				saveFile.createNewFile();
+			String root_path = request.getSession().getServletContext()
+					.getRealPath(request.getRequestURI());
+			root_path = root_path.substring(0, root_path.lastIndexOf("xupt"))
+					+ "student_score\\";
+			File file = new File(root_path);
+			if (!file.exists()) {
+				file.mkdirs();// 创建保存 学生 xml的文件夹
 			}
-			Writer outStream = new OutputStreamWriter(new FileOutputStream(
-					saveFile), "UTF-8");
-			outStream.write(xml);
-			outStream.close();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			filename = root_path + filename + ".xml";// 文件名, 对学号进行加密
+			int is_evaluation = 1;// 判断用户是否评价 如果评价则为1 未评价则为0
+			if (new File(filename).exists()
+					&& CalculateFileTime.isRequest(new File(filename))) {
+				System.out.println("删除文件");
+				 new File(filename).delete();
+			}
+
+			if (!new File(filename).exists()
+					|| CalculateFileTime.isRequest(new File(filename))) {// 如果文件不存在
+																			// 或者创建文件的日志，超过了最长期限则重新请求。
+				@SuppressWarnings("deprecation")
+				String url = request.getParameter("url")
+						+ "&xm="
+						+ URLEncoder.encode(URLDecoder.decode(
+								request.getParameter("xm"), "utf-8"),"GBK")
+						+ "&gnmkdm=" + request.getParameter("gnmkdm");
+				System.out.println("url:" + url);
+				try {
+					// 这里是处理异常 如果发生异常则表明 用户未评价
+					new ChaXunChengJiUtil().requestHttpGetXML(session,
+							filename, url,xh);
+
+				} catch (StringIndexOutOfBoundsException e) {
+					// TODO: handle exception
+					e.printStackTrace();
+					is_evaluation = 0;// 标为0 表示未评价
+				}
+				/*
+				 * if (is_evaluation != 0) {//如果用户已经评价过 则并发请求 ThreadMain
+				 * threadMain = new ThreadMain();//定义一个线程池,并发请求
+				 * threadMain.thread_request(session, filename, url,
+				 * threadMain); }
+				 */catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			String json_result = "";
+			if (is_evaluation == 1) {// 评价过
+				json_result = getJson(filename);
+			} else {
+				json_result = "no_evaluation";// 未评价教师
+			}
+			// out.print(_end_data);//返回xml
+			System.out.println("json_result" + json_result);
+			out.print(json_result);// 返回json
 		}
 	}
 
@@ -200,15 +173,22 @@ public class ChaXunXinXi extends HttpServlet {
 				for (XueKeScore score : listScores) {// 查找同一学年的成绩，并将这些成绩保存在list中
 					if (score.getXn().equals(scoreModel.getXn())) {// 如果是同一学年
 						XueKeScore tableScore = new XueKeScore();
+						tableScore.setKcdm(score.getKcdm());// 增加课程代码，为了实现好友推荐
 						tableScore.setXq(score.getXq());
 						tableScore.setCj(score.getCj());
 						tableScore.setXf(score.getXf());
-						tableScore.setPscj(score.getPscj()==null?"\\":score.getPscj());
-						tableScore.setQmcj(score.getQmcj()==null?"\\":score.getQmcj());
+						tableScore.setPscj(score.getPscj() == null ? "\\"
+								: score.getPscj());
+						tableScore.setQmcj(score.getQmcj() == null ? "\\"
+								: score.getQmcj());
 						tableScore.setXymc(score.getXymc());
-						tableScore.setBkcj(score.getBkcj()==null?" ":score.getBkcj());
-						if (score.getKcmc() !=null) {
-							tableScore.setKcmc(score.getKcmc().length()>7?score.getKcmc().substring(0, 7)+"...":score.getKcmc());
+						tableScore.setBkcj(score.getBkcj() == null ? " "
+								: score.getBkcj());
+						if (score.getKcmc() != null) {
+							tableScore
+									.setKcmc(score.getKcmc().length() > 7 ? score
+											.getKcmc().substring(0, 7) + "..."
+											: score.getKcmc());
 						}
 						tableScore.setKcxz(score.getKcxz());
 						listKeScores.add(tableScore);
@@ -220,7 +200,6 @@ public class ChaXunXinXi extends HttpServlet {
 			ScoreModelDAO scoreModelDAO = new ScoreModelDAO();
 			scoreModelDAO.setLiScoreModels(listTableScore);
 			json_score = JSONUtil.toJSON(scoreModelDAO);
-//			System.out.println("json:" + json_score);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -229,14 +208,37 @@ public class ChaXunXinXi extends HttpServlet {
 	}
 
 	/**
-	 * 读文件
+	 * 实现对xml的加密
+	 * 
+	 * @param filename
+	 * @return
 	 */
 	private InputStream getStringStream(String filename) {
 		InputStream in = null;
 		try {
-//			System.out.println("读文件" + filename);
-			in = new FileInputStream(filename);
+			int index = filename.lastIndexOf("\\");
+
+			String xuehao = filename.substring(index + 1, filename.length())
+					.split("\\.")[0];
+			if (!FileEncryptAndDecrypt.readFileLastByte(filename,
+					xuehao.length()).equals(xuehao)) {// 未加密
+				// 加密
+				FileEncryptAndDecrypt.encrypt(filename, xuehao);
+			}
+			// 文件加密过
+			String destFile = filename.substring(0, index) + "\\temp\\"
+					+ Passport.jiami(xuehao);// 临时文件名 用base64进行加密
+			if (new File(destFile).exists()) {
+				;
+			} else {
+				FileEncryptAndDecrypt.decrypt(filename, destFile,
+						xuehao.length());// 解密
+			}
+			in = new FileInputStream(new File(destFile));// 读取临时文件的内容
 		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

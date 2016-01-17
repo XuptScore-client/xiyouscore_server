@@ -53,7 +53,7 @@ public class ChangePasswd extends HttpServlet {
 		/**
 		 * 先进行get请求，获取html中 __VIEWSTATE参数的值
 		 */
-		String get_result = HttpUtil.gethttp(HttpUtil.IP + url, session);// 查询为通过的学科
+		String get_result = HttpUtil.gethttp(HttpUtil.BASE_URL + url, session);// 查询为通过的学科
 		// get请求
 		String viewstate = HtmlUtil.getInput(get_result, "__VIEWSTATE");
 		viewstate = URLEncoder.encode(viewstate);// 必须使用编码之后的字符串
@@ -67,7 +67,7 @@ public class ChangePasswd extends HttpServlet {
 		map.put("TextBox3", new_password);
 		map.put("TextBox4", new_password);
 		map.put("Button1", "%D0%DE++%B8%C4");
-		String post_result = HttpUtil.http(HttpUtil.IP + url, map, session);//修改密码
+		String post_result = HttpUtil.http(HttpUtil.BASE_URL + url, map, session);//修改密码
 	//	System.out.println("script:"+HtmlUtil.htmlRemoveTag(post_result));
 		String script = HtmlUtil.htmlRemoveTag(post_result);
 		

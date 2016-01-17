@@ -283,11 +283,50 @@ public class Passport {
 	}
 
 	/**
+	 * 加密
+	 * 
+	 * @param string
+	 *            原始字符串
+	 * @param miyao
+	 *            密钥
+	 * @return
+	 */
+	public static String jiami(String string, String miyao) {
+		// 先进行base64加密 然后进行加密
+		String str1 = string;
+		try {
+			str1 = BASE64.encryptBASE64(string.getBytes());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return new Passport().passport_encrypt(str1, miyao);
+	}
+
+	/**
 	 * jiemi
 	 * 
 	 * @param args
 	 */
-	public static String jiemi(String string) {
+	public String jiemi(String string, String miyao) {
+		// 先进行base64加密 然后进行加密
+		String str1 = string;
+		try {
+			str1 = new Passport().passport_decrypt(str1, miyao);
+			return new String(BASE64.decryptBASE64(str1));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return str1;
+	}
+
+	/**
+	 * jiemi
+	 * 
+	 * @param args
+	 */
+	public String jiemi(String string) {
 		// 先进行base64加密 然后进行加密
 		String str1 = string;
 		try {
@@ -300,16 +339,59 @@ public class Passport {
 		return str1;
 	}
 
+	/**
+	 * 1：增加排名查询 \n 2:修复部分稳定性bug \n4：实现埋点记录
+	 * 
+	 * @param args
+	 */
+    static String time_key = "";
 	public static void main(String[] args) {
-		/*String a = "1.1.2.4";
-		String b = "1.1.";
-		System.out.println(a.compareTo(b));*/
+		System.out.println(checkRankRequestData(getRequestParmas("04113129"),time_key));
+		System.out.println(time_key);
+		/*
+		 * String a = "1.1.2.4"; String b = "1.1.";
+		 * System.out.println(a.compareTo(b));
+		 */
 		/*
 		 * //加密 System.out.println(new Passport().md5("123"));
 		 * System.out.println(); //解密 System.out.println(new
-		 * Passport().passport_decrypt("V2QBPwQw", "wwwww"));
+		 * Passport().passport_decrypt("V2QBPwQw", "wwwww")); zhao..yuan00
+		 * 05147061
 		 */
-		System.out
-				.println(jiemi("WG4PPQIeCjQBT1oZVU5XfVdJVGoDTQk4U1dUXg=="));
+		// System.out
+		// .println(new Passport()
+		// .jiemi("VkwJAVNhXCBdElUGVkkCYldJAhIMWl0oBEBXEwUfACBZbQg9AhIIa1EYVAJbPFc4CVcFWw=="));
+		// System.out.println(new Passport().jiami("04113129"));
 	}
+
+	public static String getRequestParmas(String data) {
+		long time = System.currentTimeMillis();
+		// String s = new char[]{3,2,3,4,3,8,3,8,3,2,3,2}.toString();
+		String realData = "";
+		try {
+			String time_s = Passport.jiami(String.valueOf(time),
+					String.valueOf(new char[] { 2, 4, 8, 8, 2, 2 }));
+			time_key = time_s;
+			realData = Passport.jiami(data, String.valueOf(time));
+			String imei = "none";
+			System.out.println(realData);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return realData;
+	}
+	
+	public static String checkRankRequestData(String data, String viewstate) {
+	    // TODO Auto-generated method stub
+	    String realXh = "";
+	    String realTime = new Passport().jiemi(viewstate, String.valueOf(new char[] { 2, 4, 8, 8, 2, 2 }));
+	    try {
+	      realXh = new Passport().jiemi(data, realTime);
+	    } catch (Exception e) {
+	      // TODO Auto-generated catch block
+	      e.printStackTrace();
+	    }
+	    return realXh;
+	  }
 }

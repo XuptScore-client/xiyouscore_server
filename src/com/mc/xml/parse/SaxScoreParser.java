@@ -63,6 +63,9 @@ public class SaxScoreParser implements ScoreParse {
 		public void endElement(String uri, String localName, String qName)
 				throws SAXException {
 			// TODO Auto-generated method stub
+			if (qName.equals("KCDM")) {
+				tableScore.setKcdm(builder.toString());
+			}
 			if (qName.equals("XN")) {
 				tableScore.setXn(builder.toString());
 			}
@@ -90,9 +93,13 @@ public class SaxScoreParser implements ScoreParse {
 			if (qName.equals("XYMC")) {
 				tableScore.setXymc(builder.toString());
 			}
+			if (qName.equals("BKCJ")) {
+				tableScore.setBkcj(builder.toString());
+			}
 			if (qName.equals("Table")) {
 				tableScores.add(tableScore);
 			}
+			
 
 		}
 
