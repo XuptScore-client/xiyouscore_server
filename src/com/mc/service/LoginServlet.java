@@ -49,8 +49,7 @@ public class LoginServlet extends HttpServlet {
 			// dDw1MjQ2ODMxNzY7Oz799QJ05KLrvCwm73IGbcfJPI91Aw==
 			// dDwxMDQ4ODYxMzk7Oz40hLwUZigX8uXjw9/VSd2LJBb6EA==
 			try {
-				map.put("__VIEWSTATE",
-						getViewState());
+				map.put("__VIEWSTATE", getViewState());
 			} catch (Exception e) {
 				// TODO: handle exception
 				e.printStackTrace();
@@ -76,17 +75,17 @@ public class LoginServlet extends HttpServlet {
 			PrintWriter out = response.getWriter();
 			out.write("error");
 		}
-		
 
 	}
 
 	private synchronized String getViewState() {
-//		String url = "http://222.24.19.201/default_ysdx.aspx";
-//		String str = HttpUtil.http(url, null, null, "GET", "222.24.19.201");
-//		String data = str.substring(str.lastIndexOf("VIEWSTATE"), str.length());
-		
-//		return data.split("\"")[2];
-		
+		// String url = "http://222.24.19.201/default_ysdx.aspx";
+		// String str = HttpUtil.http(url, null, null, "GET", "222.24.19.201");
+		// String data = str.substring(str.lastIndexOf("VIEWSTATE"),
+		// str.length());
+
+		// return data.split("\"")[2];
+
 		return "dDwyODE2NTM0OTg7Oz4EPWKUJ7QVy9jt5geaO9kcCdS0zQ%3D%3D";
 	}
 
@@ -129,9 +128,9 @@ public class LoginServlet extends HttpServlet {
 		}
 		if (newurl.equals("密码错误！！")) {// 密码错误
 			result = "error";
-		} else if(result.contains("txtSecretCode")){
+		} else if (result.contains("txtSecretCode")) {
 			result = "errorCode";
-		}else {
+		} else {
 			if (username.length() != 8) {
 				result = "no_user";
 			} else {
@@ -168,7 +167,7 @@ public class LoginServlet extends HttpServlet {
 					}
 					newurl = HttpUtil.BASE_URL + newurl;
 
-//					result = HttpUtil.gethttp(newurl, sessionID);// 返回重定向的页面
+					// result = HttpUtil.gethttp(newurl, sessionID);// 返回重定向的页面
 					System.out.println("result2:" + result);
 					result = HtmlUtil.getHERF(result, 1);// 获取所有的herf ， 比如
 															// 查询成绩的herf
@@ -190,6 +189,10 @@ public class LoginServlet extends HttpServlet {
 			out.write(result);
 		}
 
+		String version = request.getParameter("version");
+		if (version != null && !version.isEmpty()) {
+			DBUtil.updateUserVersion(username, version);
+		}
 	}
 
 	public String readTxt(String filePath) {
