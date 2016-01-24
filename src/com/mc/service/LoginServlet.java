@@ -42,6 +42,7 @@ public class LoginServlet extends HttpServlet {
 		String sessionID = request.getParameter("session");
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
+		System.out.println("username:" + username + " +" + password);
 		String txtSecretCode = request.getParameter("txtSecretCode");
 
 		try {
@@ -71,6 +72,8 @@ public class LoginServlet extends HttpServlet {
 			// }
 		} catch (Exception e) {
 			// TODO: handle exception
+			System.err.println("mcmc"+e);
+			e.printStackTrace();
 			response.setCharacterEncoding("utf-8");
 			PrintWriter out = response.getWriter();
 			out.write("error");
@@ -181,6 +184,7 @@ public class LoginServlet extends HttpServlet {
 				}
 			}
 		}
+		System.out.println("Longi:" + result);
 		// 将用户账号 插入到 ip中
 		if (xunhuan_times == 0 || is_succ) {
 			response.setCharacterEncoding("utf-8");

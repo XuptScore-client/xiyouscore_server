@@ -100,8 +100,7 @@ public class HttpUtil {
 			// 发送请求参数
 			out.print(sb.toString().substring(0, sb.length() - 1).toString());
 			// flush输出流的缓冲
-			out.flush();
-			// 定义BufferedReader输入流来读取URL的响应
+			out.flush();                                                                                                                                      	// 定义BufferedReader输入流来读取URL的响应
 			in = new BufferedReader(new InputStreamReader(con.getInputStream()));
 			String line;
 			while ((line = in.readLine()) != null) {

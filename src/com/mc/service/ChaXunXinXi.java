@@ -82,11 +82,22 @@ public class ChaXunXinXi extends HttpServlet {
 		/**
 		 * 查询数据库该学号和姓名是否对应
 		 */
-		if (!DBUtil.checkXhAndName(name, filename)) {// 学号和姓名不能匹配
-			System.out.println("ip warning!!!");
-			out.print("ip warning!!!");
-		} else {
-
+		System.out.println("name:" + name);
+		String checkName = name.substring(0, 1);
+		if ("?".equals(checkName)) {
+			checkName = name.substring(1, 2);
+			System.out
+					.println("?".equals(checkName) + " " + checkName.length());
+			try {
+				checkName = name.substring(2, 3);
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+		}
+//		if (!DBUtil.checkXhAndName("%" + checkName + "%", filename)) {// 学号和姓名不能匹配
+//			System.out.println("ip warning!!!");
+//			out.print("ip warning!!!");
+//		} else {
 			String root_path = request.getSession().getServletContext()
 					.getRealPath(request.getRequestURI());
 			root_path = root_path.substring(0, root_path.lastIndexOf("xupt"))
@@ -100,7 +111,7 @@ public class ChaXunXinXi extends HttpServlet {
 			if (new File(filename).exists()
 					&& CalculateFileTime.isRequest(new File(filename))) {
 				System.out.println("删除文件");
-				 new File(filename).delete();
+				new File(filename).delete();
 			}
 
 			if (!new File(filename).exists()
@@ -110,13 +121,12 @@ public class ChaXunXinXi extends HttpServlet {
 				String url = request.getParameter("url")
 						+ "&xm="
 						+ URLEncoder.encode(URLDecoder.decode(
-								request.getParameter("xm"), "utf-8"),"GBK")
+								request.getParameter("xm"), "utf-8"), "GBK")
 						+ "&gnmkdm=" + request.getParameter("gnmkdm");
-				System.out.println("url:" + url);
 				try {
 					// 这里是处理异常 如果发生异常则表明 用户未评价
 					new ChaXunChengJiUtil().requestHttpGetXML(session,
-							filename, url,xh);
+							filename, url, xh);
 
 				} catch (StringIndexOutOfBoundsException e) {
 					// TODO: handle exception
@@ -140,9 +150,8 @@ public class ChaXunXinXi extends HttpServlet {
 				json_result = "no_evaluation";// 未评价教师
 			}
 			// out.print(_end_data);//返回xml
-			System.out.println("json_result" + json_result);
 			out.print(json_result);// 返回json
-		}
+//		}
 	}
 
 	/**

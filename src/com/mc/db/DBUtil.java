@@ -62,7 +62,7 @@ public class DBUtil {
 
 	public static void main(String[] args) throws Exception {
 		DBUtil dbUtil = new DBUtil();
-	  updateUserPassword("04113129","chaoking1993");
+		updateUserPassword("04113129", "chaoking1993");
 		/*
 		 * Connection conn = dbUtil.openConnection();
 		 * 
@@ -163,6 +163,9 @@ public class DBUtil {
 		String sql = "select time,isPoll,scaletype from polldownimage  order by polldownimage_id DESC limit 1";
 		Connection conn = DBUtil.openConnection();
 		String result = "no";
+		if (conn == null) {
+			return "0|0|0";
+		}
 		try {
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ResultSet ts = ps.executeQuery();
@@ -329,6 +332,9 @@ public class DBUtil {
 	public static void updateUserVersion(String username, String version) {
 		String sql = "update xuptscore.users set version = ? where username = ?";
 		Connection conn = DBUtil.openConnection();
+		if (conn == null) {
+			return;
+		}
 		try {
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setString(1, version);
@@ -370,7 +376,8 @@ public class DBUtil {
 	/**
 	 * 插入用户版本
 	 */
-	public static void insertUserVersion(String username,String name, String version) {
+	public static void insertUserVersion(String username, String name,
+			String version) {
 		if (isHaveName(username, name)) {
 			String sql = "update users set version = ? where username = ?";
 			Connection conn = DBUtil.openConnection();
@@ -387,6 +394,7 @@ public class DBUtil {
 			DBUtil.closeConn(conn);
 		}
 	}
+
 	/**
 	 * 判断用户名是否为空 也就是 为空是第一次登陆
 	 * 
@@ -468,7 +476,7 @@ public class DBUtil {
 	 * 修复BUG 查询用户名和学号是否对应。
 	 */
 	public static boolean checkXhAndName(String name, String username) {
-		String sql = "select count(*) from users where name = ? and username = ?";
+		String sql = "select count(*) from users where name = ? and username like ?";
 		Connection conn = DBUtil.openConnection();
 		if (conn == null) {
 			return true;

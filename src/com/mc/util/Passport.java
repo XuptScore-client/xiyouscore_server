@@ -344,9 +344,11 @@ public class Passport {
 	 * 
 	 * @param args
 	 */
-    static String time_key = "";
+	static String time_key = "";
+
 	public static void main(String[] args) {
-		System.out.println(checkRankRequestData(getRequestParmas("04113129"),time_key));
+		System.out.println(checkRankRequestData(getRequestParmas("04113129"),
+				time_key));
 		System.out.println(time_key);
 		/*
 		 * String a = "1.1.2.4"; String b = "1.1.";
@@ -358,10 +360,19 @@ public class Passport {
 		 * Passport().passport_decrypt("V2QBPwQw", "wwwww")); zhao..yuan00
 		 * 05147061
 		 */
-		// System.out
-		// .println(new Passport()
-		// .jiemi("VkwJAVNhXCBdElUGVkkCYldJAhIMWl0oBEBXEwUfACBZbQg9AhIIa1EYVAJbPFc4CVcFWw=="));
-		// System.out.println(new Passport().jiami("04113129"));
+		System.out.println(new Passport()
+				.jiemi("UF0MY1FKXSIBTAdUU2JSNQcaAz0AQgE5URUEUAEUUDxWDApc"));
+		System.out.println(new Passport().jiami("04113129"));
+
+		String name = "??àÄ";
+		String checkName = name.substring(0, 1);
+		if ("?".equals(checkName)) {
+			checkName = name.substring(1, 2);
+			if ("?".equals(checkName) && checkName.length() >= 3) {
+				checkName = name.substring(2, 3);
+			}
+		}
+		System.out.println("cha:" + checkName);
 	}
 
 	public static String getRequestParmas(String data) {
@@ -381,17 +392,18 @@ public class Passport {
 		}
 		return realData;
 	}
-	
+
 	public static String checkRankRequestData(String data, String viewstate) {
-	    // TODO Auto-generated method stub
-	    String realXh = "";
-	    String realTime = new Passport().jiemi(viewstate, String.valueOf(new char[] { 2, 4, 8, 8, 2, 2 }));
-	    try {
-	      realXh = new Passport().jiemi(data, realTime);
-	    } catch (Exception e) {
-	      // TODO Auto-generated catch block
-	      e.printStackTrace();
-	    }
-	    return realXh;
-	  }
+		// TODO Auto-generated method stub
+		String realXh = "";
+		String realTime = new Passport().jiemi(viewstate,
+				String.valueOf(new char[] { 2, 4, 8, 8, 2, 2 }));
+		try {
+			realXh = new Passport().jiemi(data, realTime);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return realXh;
+	}
 }
