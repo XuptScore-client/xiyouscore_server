@@ -23,6 +23,7 @@ public class GetUserPhoto extends HttpServlet {
 	public GetUserPhoto() {
 		super();
 	}
+
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		this.doPost(request, response);
@@ -50,7 +51,7 @@ public class GetUserPhoto extends HttpServlet {
 			e.printStackTrace();
 		}
 		DBUtil.closeConn(conn);
-		PrintWriter out =response.getWriter();
+		PrintWriter out = response.getWriter();
 		out.print(url);
 	}
 

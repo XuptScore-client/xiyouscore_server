@@ -70,8 +70,6 @@ public class FileEncryptAndDecrypt {
 		}
 	}
 
-	
-	
 	/**
 	 * 解密
 	 * 
@@ -153,11 +151,14 @@ public class FileEncryptAndDecrypt {
 	}
 
 	public static void main(String[] args) {
-    	 try {
-//			encrypt("E:\\apache-tomcat-6.0.30\\apache-tomcat-6.0.30\\webapps\\xuptqueryscore\\index.jsp","mc");
-    		 decrypt("E:\\apache-tomcat-6.0.30\\apache-tomcat-6.0.30\\webapps\\xuptqueryscore\\index.jsp","E:\\apache-tomcat-6.0.30\\apache-tomcat-6.0.30\\webapps\\xuptqueryscore\\ab",2);
-    		 
-//    		 System.out.println(readFileLastByte("E:\\apache-tomcat-6.0.30\\apache-tomcat-6.0.30\\webapps\\xuptqueryscore\\abc", 2)==null?"未加密":"加密");
+		try {
+			// encrypt("E:\\apache-tomcat-6.0.30\\apache-tomcat-6.0.30\\webapps\\xuptqueryscore\\index.jsp","mc");
+			decrypt("E:\\apache-tomcat-6.0.30\\apache-tomcat-6.0.30\\webapps\\xuptqueryscore\\index.jsp",
+					"E:\\apache-tomcat-6.0.30\\apache-tomcat-6.0.30\\webapps\\xuptqueryscore\\ab",
+					2);
+
+			// System.out.println(readFileLastByte("E:\\apache-tomcat-6.0.30\\apache-tomcat-6.0.30\\webapps\\xuptqueryscore\\abc",
+			// 2)==null?"未加密":"加密");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

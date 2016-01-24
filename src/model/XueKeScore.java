@@ -8,7 +8,7 @@ package model;
  */
 public class XueKeScore {
 
-	private String kcdm;//课程代码
+	private String kcdm;// 课程代码
 	private String xn;// 学年
 	private String xq;// 学期
 	private String kcmc;// 课程

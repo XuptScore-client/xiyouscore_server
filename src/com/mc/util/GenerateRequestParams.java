@@ -9,9 +9,10 @@ public class GenerateRequestParams {
 		long time = System.currentTimeMillis();
 		try {
 
-			String time_s = new Passport().jiami(String.valueOf(time), "248822");
+			String time_s = new Passport()
+					.jiami(String.valueOf(time), "248822");
 			score = new Passport().jiami(score, String.valueOf(time));
-			
+
 			System.out.println("score:" + score + "  time:" + time_s);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

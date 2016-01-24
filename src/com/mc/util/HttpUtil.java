@@ -100,7 +100,7 @@ public class HttpUtil {
 			// 发送请求参数
 			out.print(sb.toString().substring(0, sb.length() - 1).toString());
 			// flush输出流的缓冲
-			out.flush();                                                                                                                                      	// 定义BufferedReader输入流来读取URL的响应
+			out.flush(); // 定义BufferedReader输入流来读取URL的响应
 			in = new BufferedReader(new InputStreamReader(con.getInputStream()));
 			String line;
 			while ((line = in.readLine()) != null) {
@@ -176,8 +176,7 @@ public class HttpUtil {
 			con.setDoInput(true);
 			con.setUseCaches(false);
 			con.setRequestProperty("Cookie", cookie);
-			con.setRequestProperty("Referer",
-					referUrl);
+			con.setRequestProperty("Referer", referUrl);
 			// con.setRequestProperty("Host", "222.24.62.120");
 			// con.setRequestProperty("Cookie", cookie);
 			con.setInstanceFollowRedirects(false);

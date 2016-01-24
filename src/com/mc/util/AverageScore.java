@@ -48,11 +48,11 @@ public class AverageScore {
 	 * @param XN
 	 * @param XQ
 	 */
-	public AverageScore(String XN, String XQ,boolean isOneXN) {
-		this.XN = isOneXN?XN + "-" + String.valueOf(Integer.parseInt(XN) + 1):XN;
+	public AverageScore(String XN, String XQ, boolean isOneXN) {
+		this.XN = isOneXN ? XN + "-" + String.valueOf(Integer.parseInt(XN) + 1)
+				: XN;
 		this.XQ = XQ;
 	}
-	
 
 	/**
 	 * prase xml ,AverageScore HashMap
@@ -158,8 +158,8 @@ public class AverageScore {
 		}
 		return result;
 	}
-    
-	private float getSomeoneCJ(String kcdm,String xmlFilepath){
+
+	private float getSomeoneCJ(String kcdm, String xmlFilepath) {
 		float cj = 0;// 成绩*学分
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		NodeList nodeList = null;
@@ -181,7 +181,7 @@ public class AverageScore {
 		for (int i = 0; i < nodeList.getLength(); i++) {
 			Element element = (Element) nodeList.item(i);
 			NodeList childList = element.getChildNodes();
-			
+
 			float xf = 0;// 学分
 			for (int j = 0; j < childList.getLength(); j++) {
 				Node node = childList.item(j);
@@ -196,7 +196,7 @@ public class AverageScore {
 				if (node.getNodeName().equals("#text")) {
 					continue;
 				}
-				
+
 				if (node.getNodeName().trim().equals("CJ")) {
 					try {
 						cj = Integer.parseInt(node.getTextContent().trim());

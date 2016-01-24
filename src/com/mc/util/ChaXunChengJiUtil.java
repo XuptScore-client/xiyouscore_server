@@ -27,13 +27,13 @@ public class ChaXunChengJiUtil {
 	 * @throws UnsupportedEncodingException
 	 * @throws StringIndexOutOfBoundsException
 	 */
-	public void requestHttpGetXML(String session, String filename, String url,String xh)
-			throws Exception, UnsupportedEncodingException,
+	public void requestHttpGetXML(String session, String filename, String url,
+			String xh) throws Exception, UnsupportedEncodingException,
 			StringIndexOutOfBoundsException {
 		/**
 		 * 先进行get请求，获取html中 __VIEWSTATE参数的值
 		 */
-		String post_result = scoreHttpResult(session, url, !STATISTICAL,xh);
+		String post_result = scoreHttpResult(session, url, !STATISTICAL, xh);
 		System.out.println("post_result" + post_result);
 		String _VIEWSTATE = HtmlUtil.getInput(post_result, "__VIEWSTATE");// 所有的成绩
 
@@ -69,13 +69,14 @@ public class ChaXunChengJiUtil {
 	 * @return
 	 */
 	public String scoreHttpResult(String session, String url,
-			boolean isStatistical,String xh) {
-		String get_result = HttpUtil.gethttp(HttpUtil.BASE_URL + url, session,xh);// 查询为通过的学科
+			boolean isStatistical, String xh) {
+		String get_result = HttpUtil.gethttp(HttpUtil.BASE_URL + url, session,
+				xh);// 查询为通过的学科
 		System.err.println("get_result:" + get_result);
 		// get请求
 		String viewstate = HtmlUtil.getInput(get_result, "__VIEWSTATE");
 		viewstate = URLEncoder.encode(viewstate);// 必须使用编码之后的字符串
-//		System.out.println("viewstate:" + viewstate);
+		// System.out.println("viewstate:" + viewstate);
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("__EVENTTARGET", "");
 		map.put("__EVENTARGUMENT", "");
@@ -88,7 +89,7 @@ public class ChaXunChengJiUtil {
 				isStatistical ? "%B3%C9%BC%A8%CD%B3%BC%C6"
 						: "%C0%FA%C4%EA%B3%C9%BC%A8");
 		String post_result = HttpUtil.http(HttpUtil.BASE_URL + url, map,
-				session,HttpUtil.BASE_URL + url);
+				session, HttpUtil.BASE_URL + url);
 		return post_result;
 	}
 
@@ -115,6 +116,7 @@ public class ChaXunChengJiUtil {
 				session);
 		return post_result;
 	}
+
 	/**
 	 * 写文件 将xml写入 自己的.xml文件中
 	 * 

@@ -15,5 +15,5 @@ public class XueKeScoreDAO {
 	public void setlKeScores(List<XueKeScore> lKeScores) {
 		this.lKeScores = lKeScores;
 	}
-	
+
 }

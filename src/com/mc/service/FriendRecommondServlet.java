@@ -37,14 +37,14 @@ public class FriendRecommondServlet extends HttpServlet {
 																			// 通过
 																			// 密钥进行机密
 		HashMap<String, String> xhAndXnMap = calculateXh(falseData, time);
-		String realXh = xhAndXnMap.get("xh");// 学号 
+		String realXh = xhAndXnMap.get("xh");// 学号
 		String realKcdm = xhAndXnMap.get("kcdm");
 		String realScore = xhAndXnMap.get("score");
 		String xn = xhAndXnMap.get("xn");// 学年
 		String xq = xhAndXnMap.get("xq");// 学期
-		
+
 	}
-	
+
 	/**
 	 * 首先解密得到正确的时间，然后通过正确的时间解密得到正确的学号 加密算法: 对时间进行base64加密，然后作为密钥对时间进行加密base64
 	 * 
@@ -57,7 +57,8 @@ public class FriendRecommondServlet extends HttpServlet {
 	private HashMap<String, String> calculateXh(String falseXh, String time) {
 		// TODO Auto-generated method stub
 		String realXh = "";
-		String realTime = new Passport().jiemi(time, String.valueOf(new char[]{2,4,8,8,2,2}));
+		String realTime = new Passport().jiemi(time,
+				String.valueOf(new char[] { 2, 4, 8, 8, 2, 2 }));
 		HashMap<String, String> xhAndXnMap = new HashMap<String, String>();// 学号
 																			// 学年
 																			// 学期

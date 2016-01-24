@@ -39,10 +39,10 @@ public class CetServlet extends HttpServlet {
 		String name = URLDecoder.decode(request.getParameter("name"), "utf-8");
 
 		System.out.println(name);
-		if (name.length()>=3) {
+		if (name.length() >= 3) {
 			name = name.substring(0, 2);
 		}
-		name = URLEncoder.encode(name,"gb2312");
+		name = URLEncoder.encode(name, "gb2312");
 		response.setCharacterEncoding("UTF-8");
 		PrintWriter out = response.getWriter();
 		adminTicket = calculateXh(adminTicket, time);
@@ -56,7 +56,8 @@ public class CetServlet extends HttpServlet {
 		HashMap<String, String> map = new HashMap<String, String>();
 		map.put("id", adminTicket);
 		map.put("name", name);
-		String result = HttpUtil.http(HttpUtil.IP_CET, map).replace("/n", "").trim();
+		String result = HttpUtil.http(HttpUtil.IP_CET, map).replace("/n", "")
+				.trim();
 		return result;
 	}
 

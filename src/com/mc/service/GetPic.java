@@ -54,24 +54,24 @@ public class GetPic extends HttpServlet {
 				break;
 			}
 		} while (cookie == null);
-		// 
+		//
 		long time = System.currentTimeMillis();
 		try {
 			saveImage(time);
-			if(!cookie.equals("null")){
-				cookie = cookie;//+ "&txtSecretCode=" + time
+			if (!cookie.equals("null")) {
+				cookie = cookie;// + "&txtSecretCode=" + time
 				System.out.println("textSession:" + cookie);
 			}
-			//TODO error pic
+			// TODO error pic
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
 			System.err.println("getPic:" + e);
 		}
-		
+
 		Session session = new Session();
 		session.setCookieSessionID(cookie);
-		session.setPicurl(FilePathUtil.picPath + "/" + time +".jpg");
+		session.setPicurl(FilePathUtil.picPath + "/" + time + ".jpg");
 		PrintWriter out = response.getWriter();
 		String json = JSONUtil.toJSON(session);
 		// String jsonp = Util.getJsonp(request, json);
@@ -108,7 +108,7 @@ public class GetPic extends HttpServlet {
 					inputStream = httpURLConnection.getInputStream();
 				}
 			}
-					System.out.println("getInputstream");
+			System.out.println("getInputstream");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -120,6 +120,7 @@ public class GetPic extends HttpServlet {
 	public static void main(String[] args) {
 		getSessionID();
 	}
+
 	/**
 	 * ªÒ»° session
 	 */
@@ -147,7 +148,7 @@ public class GetPic extends HttpServlet {
 				if (cookieval != null) {
 					sessionid = cookieval.substring(0, cookieval.indexOf(";"));
 				}
-				System.out.println("session:"+sessionid);
+				System.out.println("session:" + sessionid);
 				return sessionid;
 			}
 		} catch (Exception e) {
@@ -166,12 +167,13 @@ public class GetPic extends HttpServlet {
 		byte[] data = new byte[1024];
 		int len = 0;
 		try {
-			File file = new File(FilePathUtil.tomcatPath + "/" + time +".jpg");
+			File file = new File(FilePathUtil.tomcatPath + "/" + time + ".jpg");
 			if (!file.exists()) {
 				System.out.println("createFile");
 				file.createNewFile();
 			}
-			fileOutputStream = new FileOutputStream(FilePathUtil.tomcatPath + "/" + time +".jpg");
+			fileOutputStream = new FileOutputStream(FilePathUtil.tomcatPath
+					+ "/" + time + ".jpg");
 			while ((len = inputStream.read(data)) != -1) {
 				fileOutputStream.write(data, 0, len);
 

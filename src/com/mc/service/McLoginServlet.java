@@ -94,7 +94,7 @@ public class McLoginServlet extends HttpServlet {
 	public void init() throws ServletException {
 		// Put your code here
 	}
-	
+
 	/**
 	 * 首先解密得到正确的时间，然后通过正确的时间解密得到正确的学号 加密算法: 对时间进行base64加密，然后作为密钥对时间进行加密base64
 	 * 
@@ -111,7 +111,8 @@ public class McLoginServlet extends HttpServlet {
 				String.valueOf(new char[] { 2, 4, 8, 8, 2, 2 }));
 		try {
 			if (time.equals("iOS")) {
-				session = new Passport().base64_decode(falseSession);// 提供给 iOS的接口
+				session = new Passport().base64_decode(falseSession);// 提供给
+																		// iOS的接口
 			} else {
 				session = new Passport().jiemi(falseSession, realTime);
 			}

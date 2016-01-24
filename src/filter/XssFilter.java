@@ -16,21 +16,20 @@ public class XssFilter implements Filter {
 
 	public void destroy() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void doFilter(ServletRequest request, ServletResponse response,
 			FilterChain chain) throws IOException, ServletException {
 		// TODO Auto-generated method stub
-		ReqHttpServletRequestWrapper reqRequest = new ReqHttpServletRequestWrapper(  
-				(HttpServletRequest) request);  
-				chain.doFilter(reqRequest, response); 
+		ReqHttpServletRequestWrapper reqRequest = new ReqHttpServletRequestWrapper(
+				(HttpServletRequest) request);
+		chain.doFilter(reqRequest, response);
 	}
 
 	public void init(FilterConfig arg0) throws ServletException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
-	
-	}
+}

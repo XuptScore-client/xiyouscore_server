@@ -46,9 +46,9 @@ public class McUploadPollImage extends HttpServlet {
 		// 获得磁盘文件条目工厂。
 		DiskFileItemFactory factory = new DiskFileItemFactory();
 		String isPoll = request.getParameter("ispoll");
-        String scaleType = request.getParameter("scaletype");
+		String scaleType = request.getParameter("scaletype");
 		String time = StaticVARUtil.getTime1();
-		DBUtil.insertPollDownView(time,isPoll,scaleType);
+		DBUtil.insertPollDownView(time, isPoll, scaleType);
 		String path = request.getSession().getServletContext()
 				.getRealPath("/image");
 		System.out.println("path:" + path);
@@ -80,7 +80,7 @@ public class McUploadPollImage extends HttpServlet {
 					// 取到最后一个反斜杠。
 					int start = value.lastIndexOf("\\");
 					// 截取上传文件的 字符串名字。+1是去掉反斜杠。
-					String filename = time+".jpg";
+					String filename = time + ".jpg";
 					request.setAttribute(name, filename);
 
 					/*

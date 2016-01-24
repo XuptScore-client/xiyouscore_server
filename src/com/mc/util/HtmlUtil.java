@@ -175,8 +175,8 @@ public class HtmlUtil {
 		// 得到所有过滤后，想要的节点
 		nodelist = nodelist.extractAllNodesThatMatch(filter, true);
 		List<Herf> listHerf = new ArrayList<Herf>();// json格式
-		String username = "";//学号
-		String xm = "";//姓名
+		String username = "";// 学号
+		String xm = "";// 姓名
 		for (int i = 0; i < nodelist.size(); i++) {
 			// System.out.println("\n");
 			LinkTag link = (LinkTag) nodelist.elementAt(i);
@@ -188,7 +188,7 @@ public class HtmlUtil {
 				Herf herf = new Herf();
 				herf.setTittle(link.getStringText());
 				herf.setHerf(link.getAttribute("href"));
-				if (herf.getTittle().equals("\u4e2a\u4eba\u4fe1\u606f")) {//如果是个人信息，则将名字和学号获取
+				if (herf.getTittle().equals("\u4e2a\u4eba\u4fe1\u606f")) {// 如果是个人信息，则将名字和学号获取
 					String[] msg = herf.getHerf().split("&");
 					username = msg[0].split("=")[1];
 					xm = msg[1].split("=")[1];
@@ -203,7 +203,7 @@ public class HtmlUtil {
 				}
 			}
 		}
-		//由于学校官网服务器关闭所以 在这主动添加 查成绩的地址
+		// 由于学校官网服务器关闭所以 在这主动添加 查成绩的地址
 		listHerf = setCXHerf(listHerf, username, xm);
 		if (flag == 1) {// 将所有的herf整合成Json数据
 			HerfDAO herfDAO = new HerfDAO();
@@ -216,18 +216,22 @@ public class HtmlUtil {
 
 	/**
 	 * 将 成绩查询的 信息添加
+	 * 
 	 * @param listHerf
 	 * @param username
 	 * @param xm
 	 * @return
 	 */
-	private static List<Herf> setCXHerf(List<Herf> listHerf,String username,String xm){
+	private static List<Herf> setCXHerf(List<Herf> listHerf, String username,
+			String xm) {
 		Herf herf = new Herf();
 		herf.setTittle("\u6210\u7ee9\u67e5\u8be2");
-		herf.setHerf("xscjcx.aspx?xh="+username+"&xm="+xm+"&gnmkdm=N121605");
+		herf.setHerf("xscjcx.aspx?xh=" + username + "&xm=" + xm
+				+ "&gnmkdm=N121605");
 		listHerf.add(herf);
 		return listHerf;
 	}
+
 	/**
 	 * 获取tittle
 	 */

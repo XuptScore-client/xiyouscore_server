@@ -51,11 +51,14 @@ public class CalculateFileTime {
 
 	/**
 	 * 比较两个时间的差值
-	 * @param last_time 老的时间
-	 * @param new_time 最新时间
-	 * @return  
+	 * 
+	 * @param last_time
+	 *            老的时间
+	 * @param new_time
+	 *            最新时间
+	 * @return
 	 */
-	public static Boolean isRequest(File Ifile,long DIFFERENT_TIME) {
+	public static Boolean isRequest(File Ifile, long DIFFERENT_TIME) {
 		long modifiedTime = Ifile.lastModified();
 		Date date = new Date(modifiedTime);
 		SimpleDateFormat mode_sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -73,13 +76,12 @@ public class CalculateFileTime {
 		// 将截取到的时间字符串转化为时间格式的字符串
 		// 默认为毫秒，除以1000是为了转换成秒
 		Date currentTime = new Date();
-				long interval = (currentTime.getTime() - beginTime.getTime()) / 1000;// 秒
-				long day = interval / (24 * 3600);// 天
-				long hour = interval % (24 * 3600) / 3600;// 小时
-				long minute = interval % 3600 / 60;// 分钟
-				long second = interval % 60;// 秒
-		System.out.println("两个时间相差：" 
-				+ hour + "小时  +  " +DIFFERENT_TIME);
+		long interval = (currentTime.getTime() - beginTime.getTime()) / 1000;// 秒
+		long day = interval / (24 * 3600);// 天
+		long hour = interval % (24 * 3600) / 3600;// 小时
+		long minute = interval % 3600 / 60;// 分钟
+		long second = interval % 60;// 秒
+		System.out.println("两个时间相差：" + hour + "小时  +  " + DIFFERENT_TIME);
 		return hour > DIFFERENT_TIME ? true : false;
 	}
 }

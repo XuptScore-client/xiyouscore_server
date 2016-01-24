@@ -15,5 +15,5 @@ public class ScoreModelDAO {
 	public void setLiScoreModels(List<ScoreModel> liScoreModels) {
 		this.liScoreModels = liScoreModels;
 	}
-	
+
 }

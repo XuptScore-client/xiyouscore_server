@@ -15,5 +15,5 @@ public class SessionDAO {
 	public void setSessionList(List<Session> sessionList) {
 		this.sessionList = sessionList;
 	}
-	
+
 }

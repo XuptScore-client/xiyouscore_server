@@ -60,7 +60,7 @@ public class CheckVersion1 extends HttpServlet {
 			while (rs_query.next()) {
 				result = judgeVersion(version, rs_query.getString("version"),
 						rs_query);
-				if (!result.equals("no")) {//更新下载次数
+				if (!result.equals("no")) {// 更新下载次数
 					String times = rs_query.getString("times");// 获取目前下载次数
 					times = String.valueOf(Integer.valueOf(times) + 1);// 次数加1
 					update_last.setString(1, times);// 将次数添加到 sql
@@ -87,7 +87,7 @@ public class CheckVersion1 extends HttpServlet {
 	private static String judgeVersion(String oldVersion, String newVersion,
 			ResultSet getVersion) {
 		try {
-			return oldVersion.compareTo(newVersion)<0? getVersion
+			return oldVersion.compareTo(newVersion) < 0 ? getVersion
 					.getString("url")
 					+ "|"
 					+ getVersion.getString("version")

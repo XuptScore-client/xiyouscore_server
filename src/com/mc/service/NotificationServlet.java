@@ -6,12 +6,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
 public class NotificationServlet extends HttpServlet {
 
 	private final int MARKTYPE = 1;// 请求是否有新闻
-	private final int DETAILTYPE = 2;//获取详细内容
-	
+	private final int DETAILTYPE = 2;// 获取详细内容
+
 	/**
 	 * Constructor of the object.
 	 */
@@ -29,8 +28,8 @@ public class NotificationServlet extends HttpServlet {
 			throws ServletException, IOException {
 
 		String type = request.getParameter("type");
-		if (type.equals(MARKTYPE+"")) {
-			
+		if (type.equals(MARKTYPE + "")) {
+
 		}
 
 	}

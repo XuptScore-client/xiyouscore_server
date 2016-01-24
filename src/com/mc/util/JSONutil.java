@@ -32,7 +32,8 @@ public class JSONutil {
 	private static String xymc = "/NewDataSet/Table/XYMC";// 学院
 
 	/**
-	 * 解析xml  返回json数据格式
+	 * 解析xml 返回json数据格式
+	 * 
 	 * @param str
 	 * @return
 	 */
@@ -42,8 +43,8 @@ public class JSONutil {
 		SAXReader saxReader = new SAXReader();
 
 		try {
-			ByteArrayInputStream in = new ByteArrayInputStream(str
-					.getBytes("utf-8"));
+			ByteArrayInputStream in = new ByteArrayInputStream(
+					str.getBytes("utf-8"));
 			org.dom4j.Document document = saxReader.read(in);
 			Element root = document.getRootElement();
 			List xnArray = root.selectNodes(xn);
@@ -73,8 +74,7 @@ public class JSONutil {
 			cjArray.toArray(cjArrays);
 			Element[] xymcArrays = new Element[xnArray.size()];
 			xymcArray.toArray(xymcArrays);
-			
-			
+
 			List<XueKeScore> list = new ArrayList<XueKeScore>();
 			for (int i = 0; i < xymcArrays.length; i++) {
 				XueKeScore xueKeScore = new XueKeScore();

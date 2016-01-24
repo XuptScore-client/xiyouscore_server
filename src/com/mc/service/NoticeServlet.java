@@ -71,15 +71,18 @@ public class NoticeServlet extends HttpServlet {
 		}
 		String filename = root_path + username + ".xml";// 文件名
 		String result = "";
-		if (new File(filename).exists()/*&&!CalculateFileTime.isRequest(new File(filename))*/) {//老用户 并且 查询在300小时以上
+		if (new File(filename).exists()/*
+										 * &&!CalculateFileTime.isRequest(new
+										 * File(filename))
+										 */) {// 老用户 并且 查询在300小时以上
 			result = "1";
-		}else {
+		} else {
 			result = DBUtil.return_notice();
 		}
 		response.setCharacterEncoding("utf-8");
 		PrintWriter out = response.getWriter();
 		out.write(result);
-		
+
 	}
 
 }

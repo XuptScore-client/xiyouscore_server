@@ -14,23 +14,27 @@ public class MyThreadTwo extends MyThread {
 	private String filename;
 	private String url;
 	private ThreadMain threadMain;
-	public MyThreadTwo(String session,String filename,String url,ThreadMain threadMain){
+
+	public MyThreadTwo(String session, String filename, String url,
+			ThreadMain threadMain) {
 		this.session = session;
 		this.filename = filename;
 		this.url = url;
 		this.threadMain = threadMain;
 	}
+
 	public void stopThread() {
 		this.isOK = false;
 	}
-	
+
 	@Override
 	public void run() {
-		while(isOK) {
+		while (isOK) {
 			try {
 				System.out.println("1并发请求");
-				new ChaXunChengJiUtil().requestHttpGetXML(session, filename, url,filename);
-				if(new File(filename).exists()) {
+				new ChaXunChengJiUtil().requestHttpGetXML(session, filename,
+						url, filename);
+				if (new File(filename).exists()) {
 					threadMain.stopAll();
 					System.out.println("1中断线程");
 					break;
@@ -45,8 +49,8 @@ public class MyThreadTwo extends MyThread {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		// 未评价教师会出现异常
-			
+			// 未评价教师会出现异常
+
 		}
 	}
 }

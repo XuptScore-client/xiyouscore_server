@@ -15,20 +15,19 @@ import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * 解析xml
- * @author Administrator
- * 2014-7-21
+ * 
+ * @author Administrator 2014-7-21
  */
 public class SaxScoreParser implements ScoreParse {
 
 	public List<XueKeScore> parse(InputStream is) throws Exception {
 		// TODO Auto-generated method stub
-		SAXParserFactory factory = SAXParserFactory.newInstance(); //取得SAXParserFactory实例  
-		SAXParser parser = factory.newSAXParser();              //从factory获取SAXParser实例  
-		MyHandler handler = new MyHandler();//实例化自定义Handler 
-		parser.parse(is, handler);  //根据自定义Handler规则解析输入流 
+		SAXParserFactory factory = SAXParserFactory.newInstance(); // 取得SAXParserFactory实例
+		SAXParser parser = factory.newSAXParser(); // 从factory获取SAXParser实例
+		MyHandler handler = new MyHandler();// 实例化自定义Handler
+		parser.parse(is, handler); // 根据自定义Handler规则解析输入流
 		return handler.getTableScores();
 	}
-
 
 	// 需要重写defaultHandler的方法
 	private class MyHandler extends DefaultHandler {
@@ -55,7 +54,7 @@ public class SaxScoreParser implements ScoreParse {
 			if (qName.equals("Table")) {
 				tableScore = new XueKeScore();
 			}
-//			System.out.println("localname:"+localName);
+			// System.out.println("localname:"+localName);
 			builder.setLength(0);// 将字符长度设置为0 以便重新开始读取元素内的字符节点
 		}
 
@@ -99,7 +98,6 @@ public class SaxScoreParser implements ScoreParse {
 			if (qName.equals("Table")) {
 				tableScores.add(tableScore);
 			}
-			
 
 		}
 
@@ -107,7 +105,7 @@ public class SaxScoreParser implements ScoreParse {
 		public void characters(char[] ch, int start, int length)
 				throws SAXException {
 			// TODO Auto-generated method stub
-			builder.append(ch, start, length);//将读取的字符数组追加到builder中  
+			builder.append(ch, start, length);// 将读取的字符数组追加到builder中
 		}
 
 	}

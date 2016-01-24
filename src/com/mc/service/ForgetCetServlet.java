@@ -24,7 +24,6 @@ public class ForgetCetServlet extends HttpServlet {
 		super();
 	}
 
-
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
@@ -61,13 +60,17 @@ public class ForgetCetServlet extends HttpServlet {
 			int zWeiInt = Integer.parseInt(zWei);
 
 			long code = pCodeInt + kChangInt + zWeiInt;
-			if (String.valueOf(code).length() != 15&&(kChangInt+zWeiInt)>kChangInt&&(kChangInt+zWeiInt)>zWeiInt) {
+			if (String.valueOf(code).length() != 15
+					&& (kChangInt + zWeiInt) > kChangInt
+					&& (kChangInt + zWeiInt) > zWeiInt) {
 				out.print("error");
 			}
-			
-			new RequestThread(name, pCodeInt, kChangInt, zWeiInt, false, out).start();
-			new RequestThread(name, pCodeInt, kChangInt, zWeiInt, true, out).start();
-			
+
+			new RequestThread(name, pCodeInt, kChangInt, zWeiInt, false, out)
+					.start();
+			new RequestThread(name, pCodeInt, kChangInt, zWeiInt, true, out)
+					.start();
+
 		} catch (Exception e) {
 			// TODO: handle exception
 			result = "error";
@@ -100,8 +103,9 @@ public class ForgetCetServlet extends HttpServlet {
 		int zWeiInt;
 		boolean isBingfa;
 		PrintWriter out;
+
 		public RequestThread(String name, int pCodeInt, int kChangInt,
-				int zWeiInt, boolean isBingfa,PrintWriter out) {
+				int zWeiInt, boolean isBingfa, PrintWriter out) {
 			this.name = name;
 			this.pCodeInt = pCodeInt;
 			this.kChangInt = kChangInt;
@@ -150,8 +154,7 @@ public class ForgetCetServlet extends HttpServlet {
 					}
 				}
 			} else {
-				String adminTicket = getCet(pCodeInt, kChangInt,
-						zWeiInt);
+				String adminTicket = getCet(pCodeInt, kChangInt, zWeiInt);
 				String result = postCet(adminTicket, name);
 				if (!("2").equals(result) && !("4").equals(result)) {
 					isSuccess = true;

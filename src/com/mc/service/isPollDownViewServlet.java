@@ -10,23 +10,18 @@ import javax.servlet.http.HttpServletResponse;
 
 public class isPollDownViewServlet extends HttpServlet {
 
-	
 	public isPollDownViewServlet() {
 		super();
 	}
 
-	
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		this.doPost(request, response);
 	}
 
-	
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		
-        		
 	}
 
 }

@@ -15,5 +15,5 @@ public class HerfDAO {
 	public void setListHerf(List<Herf> listHerf) {
 		this.listHerf = listHerf;
 	}
-	
+
 }

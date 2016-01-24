@@ -36,8 +36,9 @@ public class IdeaBackServlet extends HttpServlet {
 	public boolean sendMail(final String msg) {
 		System.out.println(msg);
 		MultiPartEmail email = new MultiPartEmail();
-		/*EmailAttachment attachment = new EmailAttachment();
-		
+		/*
+		 * EmailAttachment attachment = new EmailAttachment();
+		 * 
 		 * String pathAll = email_attach .getText().toString();
 		 * attachment.setPath(pathAll);
 		 * 
@@ -66,7 +67,7 @@ public class IdeaBackServlet extends HttpServlet {
 			// 邮件正文消息
 			email.setMsg(msg);
 
-			//email.attach(attachment);
+			// email.attach(attachment);
 
 			email.send();
 		} catch (EmailException e1) {

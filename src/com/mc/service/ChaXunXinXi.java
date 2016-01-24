@@ -94,64 +94,64 @@ public class ChaXunXinXi extends HttpServlet {
 				// TODO: handle exception
 			}
 		}
-//		if (!DBUtil.checkXhAndName("%" + checkName + "%", filename)) {// 学号和姓名不能匹配
-//			System.out.println("ip warning!!!");
-//			out.print("ip warning!!!");
-//		} else {
-			String root_path = request.getSession().getServletContext()
-					.getRealPath(request.getRequestURI());
-			root_path = root_path.substring(0, root_path.lastIndexOf("xupt"))
-					+ "student_score\\";
-			File file = new File(root_path);
-			if (!file.exists()) {
-				file.mkdirs();// 创建保存 学生 xml的文件夹
-			}
-			filename = root_path + filename + ".xml";// 文件名, 对学号进行加密
-			int is_evaluation = 1;// 判断用户是否评价 如果评价则为1 未评价则为0
-			if (new File(filename).exists()
-					&& CalculateFileTime.isRequest(new File(filename))) {
-				System.out.println("删除文件");
-				new File(filename).delete();
-			}
+		// if (!DBUtil.checkXhAndName("%" + checkName + "%", filename)) {//
+		// 学号和姓名不能匹配
+		// System.out.println("ip warning!!!");
+		// out.print("ip warning!!!");
+		// } else {
+		String root_path = request.getSession().getServletContext()
+				.getRealPath(request.getRequestURI());
+		root_path = root_path.substring(0, root_path.lastIndexOf("xupt"))
+				+ "student_score\\";
+		File file = new File(root_path);
+		if (!file.exists()) {
+			file.mkdirs();// 创建保存 学生 xml的文件夹
+		}
+		filename = root_path + filename + ".xml";// 文件名, 对学号进行加密
+		int is_evaluation = 1;// 判断用户是否评价 如果评价则为1 未评价则为0
+		if (new File(filename).exists()
+				&& CalculateFileTime.isRequest(new File(filename))) {
+			System.out.println("删除文件");
+			new File(filename).delete();
+		}
 
-			if (!new File(filename).exists()
-					|| CalculateFileTime.isRequest(new File(filename))) {// 如果文件不存在
-																			// 或者创建文件的日志，超过了最长期限则重新请求。
-				@SuppressWarnings("deprecation")
-				String url = request.getParameter("url")
-						+ "&xm="
-						+ URLEncoder.encode(URLDecoder.decode(
-								request.getParameter("xm"), "utf-8"), "GBK")
-						+ "&gnmkdm=" + request.getParameter("gnmkdm");
-				try {
-					// 这里是处理异常 如果发生异常则表明 用户未评价
-					new ChaXunChengJiUtil().requestHttpGetXML(session,
-							filename, url, xh);
+		if (!new File(filename).exists()
+				|| CalculateFileTime.isRequest(new File(filename))) {// 如果文件不存在
+																		// 或者创建文件的日志，超过了最长期限则重新请求。
+			@SuppressWarnings("deprecation")
+			String url = request.getParameter("url")
+					+ "&xm="
+					+ URLEncoder.encode(URLDecoder.decode(
+							request.getParameter("xm"), "utf-8"), "GBK")
+					+ "&gnmkdm=" + request.getParameter("gnmkdm");
+			try {
+				// 这里是处理异常 如果发生异常则表明 用户未评价
+				new ChaXunChengJiUtil().requestHttpGetXML(session, filename,
+						url, xh);
 
-				} catch (StringIndexOutOfBoundsException e) {
-					// TODO: handle exception
-					e.printStackTrace();
-					is_evaluation = 0;// 标为0 表示未评价
-				}
-				/*
-				 * if (is_evaluation != 0) {//如果用户已经评价过 则并发请求 ThreadMain
-				 * threadMain = new ThreadMain();//定义一个线程池,并发请求
-				 * threadMain.thread_request(session, filename, url,
-				 * threadMain); }
-				 */catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+			} catch (StringIndexOutOfBoundsException e) {
+				// TODO: handle exception
+				e.printStackTrace();
+				is_evaluation = 0;// 标为0 表示未评价
 			}
-			String json_result = "";
-			if (is_evaluation == 1) {// 评价过
-				json_result = getJson(filename);
-			} else {
-				json_result = "no_evaluation";// 未评价教师
+			/*
+			 * if (is_evaluation != 0) {//如果用户已经评价过 则并发请求 ThreadMain threadMain
+			 * = new ThreadMain();//定义一个线程池,并发请求
+			 * threadMain.thread_request(session, filename, url, threadMain); }
+			 */catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			// out.print(_end_data);//返回xml
-			out.print(json_result);// 返回json
-//		}
+		}
+		String json_result = "";
+		if (is_evaluation == 1) {// 评价过
+			json_result = getJson(filename);
+		} else {
+			json_result = "no_evaluation";// 未评价教师
+		}
+		// out.print(_end_data);//返回xml
+		out.print(json_result);// 返回json
+		// }
 	}
 
 	/**

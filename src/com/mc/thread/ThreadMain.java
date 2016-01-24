@@ -18,10 +18,11 @@ public class ThreadMain {
 		threadPool.clear();
 	}
 
-	public static void thread_request(String session,String filename,String url,ThreadMain threadMain) {
+	public static void thread_request(String session, String filename,
+			String url, ThreadMain threadMain) {
 		// 实例化两个线程获取到随机数为68时就停止进程，并输出
-		MyThread thread1 = new MyThreadOne(session,filename,url,threadMain);// 实例化线程1
-		MyThread thread2 = new MyThreadTwo(session,filename,url,threadMain);// 实例化线程2
+		MyThread thread1 = new MyThreadOne(session, filename, url, threadMain);// 实例化线程1
+		MyThread thread2 = new MyThreadTwo(session, filename, url, threadMain);// 实例化线程2
 		threadPool.put("thread1", thread1);// 将线程1放入线程池中
 		threadPool.put("thread2", thread2);// 将线程2放入线程池中
 		thread1.start();// 运行
