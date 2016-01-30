@@ -62,9 +62,16 @@ public class LoginServlet extends HttpServlet {
 			map.put("lbLanguage", "");
 			map.put("hidPdrs", "");
 			map.put("hidsc", "");
-			if (!txtSecretCode.isEmpty()) {
+			if (txtSecretCode !=null && !txtSecretCode.isEmpty()) {
 				map.put("txtSecretCode", txtSecretCode);
 				System.out.println("user code:" + txtSecretCode);
+			}else{
+				map.clear();
+				map.put("__VIEWSTATE", "dDwxMTE4MjQwNDc1Ozs%2BombGLJflIyczODVOjorgMB6XZe8%3D");
+				map.put("TextBox1", username);
+				map.put("TextBox2", password);
+				map.put("RadioButtonList1", "%D1%A7%C9%FA");
+				map.put("Button1", "+%B5%C7+%C2%BC+");
 			}
 
 			requestData(request, response, sessionID, username, password, map,
@@ -99,8 +106,10 @@ public class LoginServlet extends HttpServlet {
 		boolean is_succ = false;
 		// 登录请求，返回 该用户请求其他链接所有地址。
 		String result = null;
-		result = HttpUtil.http(HttpUtil.BASE_URL + HttpUtil.LOGIN_URL, map,
-				sessionID);// post请求
+		result = HttpUtil
+				.http(HttpUtil.BASE_URL
+						+ (map.containsKey("txtSecretCode") ? HttpUtil.LOGIN_URL
+								: HttpUtil.MOGIC_URl), map, sessionID);// post请求
 		String msg = result;
 		if (!"error".equals(result)) {
 			// 正则表达式 获取script中的数据

@@ -361,7 +361,7 @@ public class Passport {
 		 * 05147061
 		 */
 		System.out.println(new Passport()
-				.jiemi("UF0MY1FKXSIBTAdUU2JSNQcaAz0AQgE5URUEUAEUUDxWDApc"));
+				.jiemi("BAIBbQM+XhNTB1E7BCZRdQYxDDVRBwh8BUEGfAYfVTRYAlsN"));
 		System.out.println(new Passport().jiami("04113129"));
 
 		String name = "??àÄ";

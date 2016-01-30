@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.Connection;
+import java.util.Enumeration;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -26,6 +27,7 @@ public class GetPic extends HttpServlet {
 
 	static String cookie = "";
 
+	static boolean times = true;
 	// static String jiamiSessionID = "";
 
 	/**
@@ -44,10 +46,12 @@ public class GetPic extends HttpServlet {
 			throws ServletException, IOException {
 
 		Connection conn = DBUtil.openConnection();
+		Enumeration en = request.getParameterNames();
+		boolean isCheck = en.hasMoreElements();
 		int i = 0;
 		do {
 			i++;
-			cookie = getSessionID();
+			cookie = getSessionID(isCheck);
 
 			if (i > 4) {
 				cookie = "null";
@@ -57,11 +61,14 @@ public class GetPic extends HttpServlet {
 		//
 		long time = System.currentTimeMillis();
 		try {
-			saveImage(time);
-			if (!cookie.equals("null")) {
-				cookie = cookie;// + "&txtSecretCode=" + time
-				System.out.println("textSession:" + cookie);
+			if (!isCheck) {
+				saveImage(time);
+				if (!cookie.equals("null")) {
+					cookie = cookie;// + "&txtSecretCode=" + time
+					System.out.println("textSession:" + cookie);
+				}
 			}
+
 			// TODO error pic
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -71,7 +78,8 @@ public class GetPic extends HttpServlet {
 
 		Session session = new Session();
 		session.setCookieSessionID(cookie);
-		session.setPicurl(FilePathUtil.picPath + "/" + time + ".jpg");
+		session.setPicurl(isCheck ? ""
+				: (FilePathUtil.picPath + "/" + time + ".jpg"));
 		PrintWriter out = response.getWriter();
 		String json = JSONUtil.toJSON(session);
 		// String jsonp = Util.getJsonp(request, json);
@@ -118,13 +126,14 @@ public class GetPic extends HttpServlet {
 	}
 
 	public static void main(String[] args) {
-		getSessionID();
+		getSessionID(true);
 	}
 
+	
 	/**
 	 * 获取 session
 	 */
-	private static synchronized String getSessionID() {
+	private static synchronized String getSessionID(boolean isCheck) {
 		String script = "error";
 		HttpURLConnection httpURLConnection = null;
 		try {
@@ -135,7 +144,14 @@ public class GetPic extends HttpServlet {
 			 * url_ip.replace(url_ip.split("/")[2], HttpUtil.IP_BACKUP);//启用
 			 * 备用服务器 }
 			 */
-			URL url = new URL(HttpUtil.BASE_URL + HttpUtil.LOGIN_URL);
+			String urlStr = "";
+			if (isCheck) {
+				urlStr = HttpUtil.BASE_URL + HttpUtil.MOGIC_URl;
+			} else {
+				urlStr = HttpUtil.BASE_URL + HttpUtil.LOGIN_URL;
+			}
+			System.out.println(urlStr);
+			URL url = new URL(urlStr);
 			if (url != null) {
 				httpURLConnection = (HttpURLConnection) url.openConnection();
 				httpURLConnection.setDoOutput(true);
@@ -149,6 +165,13 @@ public class GetPic extends HttpServlet {
 					sessionid = cookieval.substring(0, cookieval.indexOf(";"));
 				}
 				System.out.println("session:" + sessionid);
+				if ((sessionid == null || sessionid.isEmpty())
+						&& !urlStr.equals(HttpUtil.BASE_URL
+								+ HttpUtil.LOGIN_URL) && times) {
+					times = false;
+					return getSessionID(true);
+				}
+
 				return sessionid;
 			}
 		} catch (Exception e) {

@@ -13,7 +13,7 @@ import java.util.Date;
  */
 public class CalculateFileTime {
 
-	private static final long DIFFERENT_DAY = 1;// 差的天数
+	private static final long DIFFERENT_DAY = 10;// 差的天数
 	private static final long DIFFERENT_TIME = 1;// 差的秒数
 
 	/**

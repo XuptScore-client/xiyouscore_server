@@ -51,6 +51,7 @@ public class HttpUtil {
 	// "http://222.24.19.202/";//备用IP
 	public static final String pic_url = BASE_URL + "/CheckCode.aspx";
 	public static final String LOGIN_URL = "/default2.aspx";// 不用验证码
+	public static final String MOGIC_URl = "/default4.aspx";
 	// public static final String LOGIN_URL = BASE_URL + "default2.aspx";//使用验证码
 	public static final String IP_BACKUP = "222.24.62.120";// 备用IP
 	private static String LOGINERROR = "loginerror";
@@ -108,6 +109,9 @@ public class HttpUtil {
 			}
 			if (new Integer(con.getResponseCode()).toString().equals("302")) {// 获取状态吗
 				String newurl = con.getHeaderField("location");
+				if (newurl.contains("xsxk_syxm.aspx")) {
+					newurl = newurl.replace("xsxk_syxm.aspx", "xs_main.aspx");
+				}
 				System.out.println("newurl:" + newurl + " url:" + url);
 				con.disconnect();
 				newurl = BASE_URL + newurl;
